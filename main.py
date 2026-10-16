@@ -19,6 +19,7 @@ FARM_GROUPS = {
 
 
 def read_rows(path=DATA_FILE):
+    # Yield each row of the semicolon-delimited CSV as a list of strings.
     with open(path, newline="", encoding="utf-8-sig") as f:
         reader = csv.reader(f, delimiter=";")
         for row in reader:
@@ -26,6 +27,8 @@ def read_rows(path=DATA_FILE):
 
 
 def group_farms(rows):
+    # Merge each farm's T1/T2 turbine columns into one value per farm by summing
+    # the available readings (blank when both turbines are missing).
     header = next(rows)
     index = {name: i for i, name in enumerate(header)}
     yield ["timestamp", *FARM_GROUPS]
@@ -38,12 +41,15 @@ def group_farms(rows):
 
 
 def write_sheet(rows, path=FARM_FILE):
+    # Write the given rows to a semicolon-delimited CSV file (overwrites it).
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";")
         writer.writerows(rows)
 
 
 def within_constraint(row, low=CONSTRAINT_LOW, high=CONSTRAINT_HIGH):
+    # True if every farm value in the row (skipping blanks/header) is within
+    # the [low, high] power boundary.
     for value in row[1:]:
         if value != "" and not low <= int(value) <= high:
             return False
@@ -51,6 +57,8 @@ def within_constraint(row, low=CONSTRAINT_LOW, high=CONSTRAINT_HIGH):
 
 
 def split_by_constraint(rows, low=CONSTRAINT_LOW, high=CONSTRAINT_HIGH):
+    # Route each data row to the within or overshoot bucket based on the
+    # constraint; return the header plus the two lists of rows.
     header = next(rows)
     within, overshoot = [], []
     for row in rows:
@@ -60,6 +68,7 @@ def split_by_constraint(rows, low=CONSTRAINT_LOW, high=CONSTRAINT_HIGH):
 
 
 def main():
+    # Build the per-farm sheet, then split it into within/overshoot sheets.
     write_sheet(group_farms(read_rows()), FARM_FILE)
     header, within, overshoot = split_by_constraint(group_farms(read_rows()))
     write_sheet([header, *within], WITHIN_CONSTRAINT_FILE)
