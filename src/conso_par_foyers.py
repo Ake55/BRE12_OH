@@ -24,7 +24,7 @@ def conso(commune, parc, time_old:str='2025-01-01', time_new:str='2026-01-01'):
       nj+=1
   prod_r=[p for p in prod_laps if p!='']
   nj=nj/24
-  prod_tot=0 #prod_tot : production énergétique totale sur le laps de temps décrit, en MJ
+  prod_tot=0 #prod_tot : production énergétique totale sur le laps de temps décrit, en MWh
   for p in prod_r:
     prod_tot+=p
   return (prod_tot/(nj*conso_par_hab_jour*pop_par_commune[commune]))
