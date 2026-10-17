@@ -1,0 +1,6 @@
+[
+  {"name": "Saint-Nazaire",   "column": "Saint-Nazaire",   "lat": "47.15085", "lon": "-2.61157", "n_turbines": 80, "mw_per_turbine": 6},
+  {"name": "Fécamp",          "column": "Fecamp",          "lat": "49.89367", "lon": "0.21833", "n_turbines": 71, "mw_per_turbine": 7},
+  {"name": "Saint-Brieuc",    "column": "Saint-Brieuc",    "lat": "48.85633", "lon": "-2.54333", "n_turbines": 62, "mw_per_turbine": 8},
+  {"name": "Yeu-Noirmoutier", "column": "Yeu-Noirmoutier", "lat": "46.87333", "lon": "-2.51333", "n_turbines": 61, "mw_per_turbine": 8}
+]
