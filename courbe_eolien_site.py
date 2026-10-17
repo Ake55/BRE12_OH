@@ -40,8 +40,8 @@ LIMITES (ne pas les oublier)
  L3  Les pertes de sillage dépendent de l'implantation (inconnue). Celles des parcs de référence sont implicitement
      incluses dans la courbe. Aucune correction de densité de parc.
  L4  Le facteur de calibration énergétique absorbe arrêts et biais ; il ne constitue pas une mesure de disponibilité technique.
- L5  Production de référence : on ignore si elle contient des bridages (fichier « within_constraint ») ; ils sont alors
-     dans A_energie.
+ L5  Production de référence : chaque CSV individuel est utilisé, sans filtrage commun entre parcs ; les valeurs
+     négatives sont ramenées à zéro et les éventuels bridages restent inclus dans A_energie.
  L6  Open-Meteo gratuit : usage non commercial, limites d'appels ; attribution requise. À vérifier pour un usage commercial.
  L6b [v2] La courbe est E[CF | vent ERA5] : elle est lissée par l'erreur du vent ERA5 (ce n'est PAS la courbe constructeur)
      et n'est valable qu'avec un vent du MÊME produit (ERA5 100 m via Open-Meteo, mêmes paramètres que les fichiers de
@@ -62,7 +62,7 @@ USAGE
  options : --seuil-regime (0 = désactiver) --data-dir (défaut data) --start/--end (climatologie du site, défaut 2016-2025)
            --outdir --v-ok --seuil-arret --min-heures --model
            --rayon-km (satellite, défaut 200) --source-sat --sans-satellite --cache-tuiles
-  Production de référence : data/production_offshore_farms_within_constraint.csv
+  Production de référence : un fichier data/<nom_du_parc>.csv par ferme de référence
 """
 import argparse
 import glob
@@ -86,13 +86,6 @@ EDGES = np.arange(0.0, 30.5, 0.5)
 CENTERS = EDGES[:-1] + 0.25
 URL = "https://archive-api.open-meteo.com/v1/archive"
 RAYON_SATELLITE_KM = 200
-PRODUCTION_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "data",
-    "production_offshore_farms_within_constraint.csv",
-)
-
-
 class DonneeManquante(Exception):
     pass
 
@@ -361,28 +354,64 @@ def telecharger_vent(lat, lon, start, end, cache_dir, model="era5"):
     return s
 
 
-def charger_production(path, parcs):
-    df = pd.read_csv(path, sep=None, engine="python")
-    tcol = next((c for c in ("timestamp_utc", "timestamp") if c in df.columns), None)
-    if tcol is None:
-        raise DonneeManquante("colonne temporelle absente (timestamp ou timestamp_utc)")
-    df[tcol] = pd.to_datetime(df[tcol], utc=True)
-    df = df.set_index(tcol).sort_index()
-    out = {}
-    for p in parcs:
-        if p["column"] not in df.columns:
-            raise DonneeManquante(f"colonne de production absente : {p['column']}")
-        x = df[p["column"]].astype(float).clip(lower=0.0)       # valeurs < 0 = auxiliaires -> 0
-        out[p["name"]] = x.resample("1h").mean() / p["pnom_mw"]  # CF horaire ; trous = NaN
-    return out
-
-
 def _normaliser_nom_fichier(nom):
     return "".join(
         c for c in unicodedata.normalize("NFKD", nom)
         .encode("ascii", "ignore").decode("ascii").casefold()
         if c.isalnum()
     )
+
+
+def charger_production(data_dir, parcs):
+    """Charge la production horaire de chaque parc depuis son propre CSV."""
+    fichiers = glob.glob(os.path.join(data_dir, "*.csv"))
+    index_fichiers = {
+        _normaliser_nom_fichier(os.path.basename(path)[:-4]): path
+        for path in fichiers
+        if not path.endswith("_hourly_data.csv")
+    }
+    out = {}
+    for parc in parcs:
+        cles = {
+            _normaliser_nom_fichier(nom)
+            for nom in (parc["name"], parc["column"])
+        }
+        correspondances = {index_fichiers[cle] for cle in cles if cle in index_fichiers}
+        if len(correspondances) != 1:
+            disponibles = ", ".join(os.path.basename(path) for path in fichiers) or "aucun fichier trouvé"
+            raise DonneeManquante(
+                f"fichier de production du parc {parc['name']} introuvable ou ambigu dans "
+                f"{data_dir} ({disponibles})"
+            )
+
+        path = correspondances.pop()
+        df = pd.read_csv(path, sep=";")
+        df.columns = df.columns.str.strip()
+        tcol = next((c for c in ("timestamp_utc", "timestamp") if c in df.columns), None)
+        pcol = next((c for c in ("production_totale_mw", "production_mw") if c in df.columns), None)
+        if tcol is None or pcol is None:
+            raise DonneeManquante(
+                f"{path} doit contenir une colonne temporelle (timestamp_utc ou timestamp) "
+                "et une colonne de production (production_totale_mw ou production_mw)"
+            )
+
+        index = pd.to_datetime(df[tcol], utc=True, errors="coerce")
+        if index.isna().any():
+            raise DonneeManquante(f"dates invalides dans {path}")
+        production = pd.to_numeric(df[pcol], errors="coerce")
+        if production.isna().any():
+            raise DonneeManquante(f"valeurs de production invalides dans {path}")
+        serie = pd.Series(
+            production.to_numpy(),
+            index=pd.DatetimeIndex(index),
+            name=parc["name"],
+        ).sort_index()
+        if serie.index.has_duplicates:
+            raise DonneeManquante(f"horodatages en double dans {path}")
+
+        # Preserve individual farm readings; negative auxiliary consumption is not generation.
+        out[parc["name"]] = serie.clip(lower=0.0).resample("1h").mean() / parc["pnom_mw"]
+    return out
 
 
 def charger_vents_parcs(data_dir, parcs):
@@ -1026,7 +1055,7 @@ def main():
     ap.add_argument("--lat", type=float); ap.add_argument("--lon", type=float)
     ap.add_argument("--n", type=int, help="nombre d'éoliennes"); ap.add_argument("--mw", type=float, help="puissance par éolienne (MW)")
     ap.add_argument("--farms", default="farms_reference.json")
-    ap.add_argument("--data-dir", default="data", help="répertoire des fichiers *_hourly_data.csv des parcs de référence")
+    ap.add_argument("--data-dir", default="data", help="répertoire des CSV de production et de vent des parcs de référence")
     ap.add_argument("--start", default="2016-01-01"); ap.add_argument("--end", default="2025-12-31")
     ap.add_argument("--model", default="", help="paramètre 'models' d'Open-Meteo. Défaut '' = aucun, comme l'extrait ayant servi à "
                     "télécharger data/*_hourly_data.csv ; mettre era5 SEULEMENT si ces fichiers ont aussi été téléchargés avec models=era5")
@@ -1044,10 +1073,8 @@ def main():
     for k in ("lat", "lon", "n", "mw"):
         if getattr(a, k) is None:
             raise DonneeManquante(f"--{k} est obligatoire")
-    if not os.path.isfile(PRODUCTION_PATH):
-        raise DonneeManquante(f"fichier de production introuvable : {PRODUCTION_PATH}")
     parcs = charger_parcs(a.farms)
-    prod = charger_production(PRODUCTION_PATH, parcs)
+    prod = charger_production(a.data_dir, parcs)
     vents = {k: vent_moyen_heure(v) for k, v in charger_vents_parcs(a.data_dir, parcs).items()}
     cfs = {}
     for p in parcs:
