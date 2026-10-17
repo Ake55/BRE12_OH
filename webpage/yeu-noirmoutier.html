@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yeu-Noirmoutier offshore wind farm analysis: hourly production against wind speed and a theoretical power curve.">
+  <title>Yeu-Noirmoutier — OceanMarathon</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="farm.css">
+</head>
+<body>
+  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false" aria-label="Open project menu">
+    <span class="panel-toggle__icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span class="panel-toggle__text">Menu</span>
+  </button>
+
+  <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+
+  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+    <div class="side-panel__inner">
+      <p class="eyebrow">BRET12 · CEREMA</p>
+      <h2 class="side-panel__title">OceanMarathon</h2>
+      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+
+      <nav class="side-nav" aria-label="Site navigation">
+        <a href="index.html">Overview</a>
+        <a href="all4windfarms.html">All four wind farms</a>
+        <a href="saint-nazaire.html">Saint-Nazaire</a>
+        <a href="saint-brieuc.html">Saint-Brieuc</a>
+        <a href="fecamp.html">Fécamp</a>
+        <a href="yeu-noirmoutier.html" aria-current="page">Yeu-Noirmoutier</a>
+        <a href="consumption.html">Commune coverage</a>
+        <a href="index.html#story">The story</a>
+        <a href="index.html#approach">Our approach</a>
+        <a href="index.html#challenge">The 48-hour challenge</a>
+        <a href="index.html#data">Source data</a>
+      </nav>
+
+      <div class="side-panel__facts">
+        <h3>Project facts</h3>
+        <dl>
+          <div>
+            <dt>Organisation</dt>
+            <dd>CEREMA</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Brest, France</dd>
+          </div>
+          <div>
+            <dt>Challenge owner</dt>
+            <dd>Matthieu Suire</dd>
+          </div>
+          <div>
+            <dt>Focus</dt>
+            <dd>Climate, energy and spatial planning</dd>
+          </div>
+          <div>
+            <dt>Dataset</dt>
+            <dd>30,701 hourly readings across four French offshore farms, 2023–2026</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="side-panel__footer">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo: Nicholas Doherty</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="subpage-head">
+      <div class="container">
+        <a class="back-link" href="all4windfarms.html">Back to all farms</a>
+        <p class="eyebrow eyebrow--light">Yeu-Noirmoutier · Vendée</p>
+        <h1>Yeu-Noirmoutier</h1>
+        <p>Located off the coasts of Île d'Yeu and Noirmoutier, adding Atlantic production to the French fleet.</p>
+        <div class="farm-meta">
+          <span id="farmPeriod">Loading matched hourly data</span>
+          <span>Hourly production vs wind</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="analysis">
+      <div class="container">
+        <div class="analysis-head">
+          <div>
+            <p class="eyebrow">Farm analysis</p>
+            <h2>Real output vs the model</h2>
+          </div>
+          <p>
+            Each point is one hour where measured production and an open wind reading
+            are available for this farm. Compare the measurements with a simplified
+            theoretical power curve.
+          </p>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span>Matched hours</span>
+            <strong id="metricHours">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>Average power</span>
+            <strong id="metricMeanPower">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>Capacity factor</span>
+            <strong id="metricCapacityFactor">—</strong>
+            <small id="metricCapacityNote">Installed capacity</small>
+          </div>
+          <div class="metric-card">
+            <span>Median power</span>
+            <strong id="metricMedianPower">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>Average wind</span>
+            <strong id="metricMeanWind">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>Producing hours</span>
+            <strong id="metricProducingHours">—</strong>
+            <small id="metricProducingNote">Share of matched hours</small>
+          </div>
+        </div>
+
+        <p class="metric-note">
+          Capacity factor is total production divided by real installed capacity
+          times matched hours. Producing hours is the share of matched hours with
+          output above zero.
+        </p>
+
+        <div class="chart-layout">
+          <div class="chart-card">
+            <div class="chart-card__top">
+              <div class="mode-switch" role="group" aria-label="Chart mode">
+                <button class="mode-switch__button is-active" type="button" data-mode="real" aria-pressed="true">Real output</button>
+                <button class="mode-switch__button" type="button" data-mode="theory" aria-pressed="false">Theoretical</button>
+                <button class="mode-switch__button" type="button" data-mode="comparison" aria-pressed="false">Comparison</button>
+              </div>
+              <span class="chart-legend-hint">Choose a view to update the explanation</span>
+            </div>
+            <div id="farmChart" class="farm-chart" role="img" aria-label="Hourly Yeu-Noirmoutier production plotted against wind speed"></div>
+            <div class="chart-card__footer">
+              <p id="coverageNote">Loading data coverage.</p>
+              <button class="button button--small" id="downloadCurve" type="button">Download empirical curve (CSV)</button>
+            </div>
+          </div>
+
+          <aside class="model-card chart-explainer" id="chartExplainer" aria-live="polite">
+            <p class="explainer-kicker" id="explainerKicker">Real output</p>
+            <h3 id="explainerTitle">Measured production by wind speed</h3>
+            <p class="chart-explainer__text" id="explainerText">
+              Each dot is one hour with both measured production and a matching wind
+              reading. The orange line averages production within 0.5 m/s wind-speed
+              bins, forming the empirical power curve.
+            </p>
+            <div class="explainer-legend" id="explainerLegend">
+              <span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Hourly measurements</span>
+              <span class="explainer-legend__item"><i class="swatch swatch--line"></i>Empirical mean (0.5 m/s bins)</span>
+            </div>
+            <p class="model-note" id="explainerNote">
+              The empirical curve reflects real farm behaviour, including wake effects,
+              maintenance and curtailment.
+            </p>
+          </aside>
+        </div>
+
+        <section class="profile-section" aria-labelledby="profileTitle">
+          <div class="profile-head">
+            <div>
+              <p class="eyebrow">Daily and seasonal patterns</p>
+              <h2 id="profileTitle">Average output through the day and the year</h2>
+            </div>
+            <label class="year-control" for="profileYear">
+              <span>Year</span>
+              <select id="profileYear"></select>
+            </label>
+          </div>
+          <p class="profile-intro">
+            These charts average measured production for each hour of the day and
+            each month of the selected year. Production is shown on the left axis and
+            average wind speed on the right axis. Only hours with data are averaged;
+            missing periods are left as gaps rather than treated as zero.
+          </p>
+          <div class="profile-grid">
+            <article class="profile-card">
+              <h3>Average by hour of day</h3>
+              <p>
+                Shows the typical daily cycle: average MW produced at each hour,
+                alongside the average wind speed for that hour.
+                Each point is a mean over the hours that actually have data for that period.
+                Missing periods are gaps, not zeroes.
+              </p>
+              <div id="hourlyChart" class="profile-chart" role="img" aria-label="Average production and wind speed by hour of day"></div>
+            </article>
+            <article class="profile-card">
+              <h3>Average by month</h3>
+              <p>
+                Shows seasonal variation: average MW produced in each month,
+                alongside the average wind speed for that month.
+                Each point is a mean over the hours that actually have data for that period.
+                Missing periods are gaps, not zeroes.
+              </p>
+              <div id="monthlyChart" class="profile-chart" role="img" aria-label="Average production and wind speed by month"></div>
+            </article>
+          </div>
+          <p class="profile-note" id="profileNote">
+            Averages for the selected year. Partial years appear as gaps.
+          </p>
+        </section>
+
+        <div class="method-strip">
+          <article>
+            <h3>Production filter</h3>
+            <p>
+              A clean hour needs both T1 and T2 readings and a total inside
+              [−10, 500] MW. Missing values are never replaced by zero.
+            </p>
+          </article>
+          <article>
+            <h3>Wind unit</h3>
+            <p>
+              Wind speed is assumed to be in km/h and is divided by 3.6 to obtain
+              m/s. The source column is kept unchanged on disk.
+            </p>
+          </article>
+          <article>
+            <h3>Hourly join</h3>
+            <p>
+              Production and wind are matched by UTC timestamp, one row to one row,
+              without interpolation. No other farm is added to this one.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">OceanMarathon</p>
+        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo credit</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data/yeu-noirmoutier.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+  <script src="script.js"></script>
+  <script src="farm.js"></script>
+</body>
+</html>

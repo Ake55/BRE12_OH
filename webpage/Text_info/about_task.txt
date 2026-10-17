@@ -23,3 +23,5 @@ An interactive dashboard plotting production-vs-wind scatter points
 and the reconstructed real power curve for each French offshore wind farm, 
 with complementary analyses added as time allows (wake effects by wind direction, 
 comparison with the theoretical curve, cross-farm smoothing).
+
+Wind farm image was gotten from: https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM

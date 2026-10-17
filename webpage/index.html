@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="OceanMarathon — an open, reproducible look at the real performance of French offshore wind farms.">
+  <title>OceanMarathon — The real output of French offshore wind</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"
+    aria-label="Open project menu">
+    <span class="panel-toggle__icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span class="panel-toggle__text">Menu</span>
+  </button>
+
+  <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+
+  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+    <div class="side-panel__inner">
+      <p class="eyebrow">BRET12 · CEREMA</p>
+      <h2 class="side-panel__title">OceanMarathon</h2>
+      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+
+      <nav class="side-nav" aria-label="On this page">
+        <a href="#overview">Overview</a>
+        <a href="all4windfarms.html">All four wind farms</a>
+        <a href="consumption.html">Commune coverage</a>
+        <!-- <a href="saint-nazaire.html">Saint-Nazaire</a>
+        <a href="saint-brieuc.html">Saint-Brieuc</a>
+        <a href="fecamp.html">Fécamp</a>
+        <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a> -->
+        <a href="#story">The story</a>
+        <a href="#approach">Our approach</a>
+        <a href="#challenge">The 48-hour challenge</a>
+        <a href="#data">Source data</a>
+      </nav>
+
+      <div class="side-panel__facts">
+        <h3>Project facts</h3>
+        <dl>
+          <div>
+            <dt>Organisation</dt>
+            <dd>CEREMA</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Brest, France</dd>
+          </div>
+          <div>
+            <dt>Challenge owner</dt>
+            <dd>Matthieu Suire</dd>
+          </div>
+          <div>
+            <dt>Focus</dt>
+            <dd>Climate, energy and spatial planning</dd>
+          </div>
+          <div>
+            <dt>Dataset</dt>
+            <dd>30,701 hourly readings across four French offshore farms, 2023–2026</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="side-panel__footer">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo:
+          Nicholas Doherty</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__content reveal">
+        <p class="eyebrow eyebrow--light">BRET12 · CEREMA · Brest</p>
+        <h1>What do French offshore wind farms <em>really</em> produce?</h1>
+        <p class="hero__lead">
+          As we electrify transport, industry and heating, we will need far more clean electricity.
+          Offshore wind is one of France's strongest cards — powerful, steady sea winds and the
+          world's second-largest maritime area. Making the most of it starts with knowing what
+          these farms actually generate.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#story">Read the story</a>
+          <a class="button button--ghost" href="#challenge">Explore the brief</a>
+        </div>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span>
+        Scroll to explore
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Project at a glance">
+      <div class="container stats__grid">
+        <div class="stat reveal">
+          <strong>4</strong>
+          <span>offshore wind farms</span>
+        </div>
+        <div class="stat reveal">
+          <strong>30,701</strong>
+          <span>hours of real production data</span>
+        </div>
+        <div class="stat reveal">
+          <strong>2023–2026</strong>
+          <span>measured, hour by hour</span>
+        </div>
+        <div class="stat reveal">
+          <strong>Measured</strong>
+          <span>not assumed</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story" id="story">
+      <div class="container story__grid">
+        <div class="story__intro reveal">
+          <p class="eyebrow">The story</p>
+          <h2>The gap between theory and reality</h2>
+        </div>
+        <div class="story__copy reveal">
+          <p class="story__lead">
+            Today we rely on theoretical power curves — built from models and wind-tunnel tests
+            on a single isolated turbine.
+          </p>
+          <p>
+            A real farm at sea behaves very differently. It is shaped by wake effects between
+            turbines, wind direction, maintenance and more. Yet that gap between theory and
+            reality is barely documented, while we plan and subsidise a multi-billion-euro
+            industry on it.
+          </p>
+          <p>
+            For the first time, years of real hourly production from France's offshore farms are
+            openly available. By crossing them with open wind data, we can reconstruct what these
+            farms truly produce — and understand why reality drifts from the model.
+          </p>
+          <blockquote>
+            The goal is an open, reproducible look at offshore wind performance: turning
+            <strong>“we assume”</strong> into <strong>“we measured.”</strong>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cards-section" aria-label="Why this matters">
+      <div class="container">
+        <div class="card-grid">
+          <article class="card reveal">
+            <span class="card__number">01</span>
+            <h3>The blind spot</h3>
+            <p>
+              Power curves come from models and wind-tunnel tests on one isolated turbine.
+              They do not capture how a full farm behaves in the open sea.
+            </p>
+          </article>
+          <article class="card reveal">
+            <span class="card__number">02</span>
+            <h3>The reality</h3>
+            <p>
+              Wakes, wind direction, maintenance and operations all shape output. The difference
+              between forecast and reality is real, and it compounds at farm scale.
+            </p>
+          </article>
+          <article class="card reveal">
+            <span class="card__number">03</span>
+            <h3>The mission</h3>
+            <p>
+              Combine open hourly production with open wind data to reconstruct real power curves
+              and make offshore wind planning more honest.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section approach" id="approach">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Our approach</p>
+          <h2>From assumption to measurement</h2>
+          <p>
+            An open, reproducible workflow that moves from raw production records to a clearer
+            picture of how French offshore wind farms really perform.
+          </p>
+        </div>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__index">01</span>
+            <div>
+              <h3>Open the data</h3>
+              <p>Start with years of real hourly production from France's offshore farms.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">02</span>
+            <div>
+              <h3>Cross-reference</h3>
+              <p>Pair production records with open wind data for the same places and hours.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">03</span>
+            <div>
+              <h3>Reconstruct</h3>
+              <p>Build the real power curve for each farm instead of relying on theory alone.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">04</span>
+            <div>
+              <h3>Explain the gap</h3>
+              <p>Examine wake effects, direction and cross-farm smoothing to understand the drift.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section challenge" id="challenge">
+      <div class="container challenge__grid">
+        <div class="challenge__intro reveal">
+          <p class="eyebrow eyebrow--light">The 48-hour challenge</p>
+          <h2>What we are building</h2>
+          <p>
+            An interactive dashboard that plots production against wind, reconstructs the real
+            power curve for each French offshore wind farm, and adds complementary analyses as
+            time allows.
+          </p>
+          <span class="badge">48 hours · open · reproducible</span>
+        </div>
+        <ul class="challenge__list reveal">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Production vs wind</h3>
+              <p>Interactive scatter plots for every farm.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Reconstructed power curves</h3>
+              <p>Real behaviour, built from measured hourly output.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Wake effects by direction</h3>
+              <p>See how wind direction changes what a farm produces.</p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <h3>Theory vs reality</h3>
+              <p>Compare measured curves with theoretical expectations.</p>
+            </div>
+          </li>
+          <li>
+            <span>05</span>
+            <div>
+              <h3>Cross-farm smoothing</h3>
+              <p>Explore how geography and scale shape aggregate output.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section data" id="data">
+      <div class="container data__grid">
+        <div class="reveal">
+          <p class="eyebrow">Source data</p>
+          <h2>Built on open, hourly records</h2>
+          <p>
+            The project uses hourly production data from four French offshore wind farms:
+            Saint-Nazaire, Saint-Brieuc, Fécamp and Yeu-Noirmoutier. The dataset spans
+            3 March 2023 to 1 October 2026.
+          </p>
+        </div>
+        <div class="data__panel reveal">
+          <div>
+            <span class="data__label">Coverage</span>
+            <strong>2023 to 2026</strong>
+          </div>
+          <div>
+            <span class="data__label">Resolution</span>
+            <strong>Hourly</strong>
+          </div>
+          <div>
+            <span class="data__label">Farms</span>
+            <strong>Saint-Nazaire · Saint-Brieuc · Fécamp · Yeu-Noirmoutier</strong>
+          </div>
+          <div>
+            <span class="data__label">Access</span>
+            <strong>Open and reproducible</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">OceanMarathon</p>
+        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo
+          credit</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compare French offshore wind production with the residential electricity consumption of a commune.">
+  <title>Commune coverage — OceanMarathon</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="farm.css">
+</head>
+<body>
+  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false" aria-label="Open project menu">
+    <span class="panel-toggle__icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span class="panel-toggle__text">Menu</span>
+  </button>
+
+  <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+
+  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+    <div class="side-panel__inner">
+      <p class="eyebrow">BRET12 · CEREMA</p>
+      <h2 class="side-panel__title">OceanMarathon</h2>
+      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+
+      <nav class="side-nav" aria-label="Site navigation">
+        <a href="index.html">Overview</a>
+        <a href="all4windfarms.html">All four wind farms</a>
+        <a href="saint-nazaire.html">Saint-Nazaire</a>
+        <a href="saint-brieuc.html">Saint-Brieuc</a>
+        <a href="fecamp.html">Fécamp</a>
+        <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a>
+        <a href="consumption.html" aria-current="page">Commune coverage</a>
+        <a href="index.html#story">The story</a>
+        <a href="index.html#approach">Our approach</a>
+        <a href="index.html#challenge">The 48-hour challenge</a>
+        <a href="index.html#data">Source data</a>
+      </nav>
+
+      <div class="side-panel__facts">
+        <h3>Project facts</h3>
+        <dl>
+          <div>
+            <dt>Organisation</dt>
+            <dd>CEREMA</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Brest, France</dd>
+          </div>
+          <div>
+            <dt>Challenge owner</dt>
+            <dd>Matthieu Suire</dd>
+          </div>
+          <div>
+            <dt>Focus</dt>
+            <dd>Climate, energy and spatial planning</dd>
+          </div>
+          <div>
+            <dt>Dataset</dt>
+            <dd>30,701 hourly readings across four French offshore farms, 2023–2026</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="side-panel__footer">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo: Nicholas Doherty</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="subpage-head">
+      <div class="container">
+        <a class="back-link" href="index.html">Back to overview</a>
+        <p class="eyebrow eyebrow--light">Consumption context · BRET12</p>
+        <h1>What could offshore wind cover?</h1>
+        <p>
+          Compare a farm's annual production with the residential electricity
+          consumption of any French commune.
+        </p>
+        <div class="farm-meta">
+          <span>Four farms</span>
+          <span>34,900 communes</span>
+          <span>2.223 MWh per person per year</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="analysis-head">
+          <div>
+            <p class="eyebrow">Commune coverage</p>
+            <h2>Farm output vs local consumption</h2>
+          </div>
+          <p>
+            Choose a farm, a commune and a year to see how much of the commune
+            residents' electricity use the farm's production could cover.
+          </p>
+        </div>
+
+        <div class="consumption-controls">
+          <label class="year-control" for="coverageFarm">
+            <span>Wind farm</span>
+            <select id="coverageFarm"></select>
+          </label>
+          <div class="commune-control">
+            <label class="control-label" for="communeSearch">Commune</label>
+            <div class="commune-search">
+              <input id="communeSearch" type="search" placeholder="Search a commune" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeResults">
+              <div class="commune-results" id="communeResults" role="listbox" hidden></div>
+            </div>
+          </div>
+          <label class="year-control" for="coverageYear">
+            <span>Year</span>
+            <select id="coverageYear"></select>
+          </label>
+        </div>
+
+        <p class="consumption-intro">
+          The estimate assumes an average of 2.223 MWh of residential electricity
+          use per person per year. Commune searches show the department when names
+          repeat across France.
+        </p>
+
+        <div class="consumption-card">
+          <div class="coverage-panel">
+            <span class="coverage-value" id="coveragePercent">—</span>
+            <span class="coverage-caption" id="coverageCaption">Choose a commune to see its coverage</span>
+            <div class="coverage-bar" aria-hidden="true"><span id="coverageBar"></span></div>
+          </div>
+          <div class="consumption-details">
+            <div class="consumption-facts">
+              <div>
+                <span>Farm production</span>
+                <strong id="consumptionFarm">—</strong>
+              </div>
+              <div>
+                <span>Residents' consumption</span>
+                <strong id="consumptionDemand">—</strong>
+              </div>
+              <div>
+                <span>Population</span>
+                <strong id="consumptionPopulation">—</strong>
+              </div>
+            </div>
+            <p class="consumption-note" id="consumptionNote">
+              Select a farm, commune and year to compare production with local electricity demand.
+            </p>
+          </div>
+        </div>
+
+        <div class="method-strip">
+          <article>
+            <h3>Farm production</h3>
+            <p>
+              Annual production is the sum of hourly MW values, giving MWh. It uses
+              the same clean production data as the farm pages.
+            </p>
+          </article>
+          <article>
+            <h3>Local consumption</h3>
+            <p>
+              Residents' consumption is estimated from commune population and an
+              average of 2.223 MWh per person per year.
+            </p>
+          </article>
+          <article>
+            <h3>Coverage</h3>
+            <p>
+              Coverage is farm production divided by residents' consumption over
+              the same period. Partial production years and missing hours are noted.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">OceanMarathon</p>
+        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo credit</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data/coverage.js"></script>
+  <script src="data/communes.js"></script>
+  <script src="script.js"></script>
+  <script src="consumption.js"></script>
+</body>
+</html>
