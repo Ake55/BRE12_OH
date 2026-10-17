@@ -29,4 +29,4 @@ def conso(commune, parc, time_old:str='2025-01-01', time_new:str='2026-01-01'):
     prod_tot+=p
   return (prod_tot/(nj*conso_par_hab_jour*pop_par_commune[commune]))
 
-print(conso('Toulouse', 'Saint-Nazaire'))
+#print(conso('Toulouse', 'Saint-Nazaire'))
