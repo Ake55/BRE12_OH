@@ -1,0 +1,103 @@
+SITE: 60 x 6.0 MW = 360 MW   |   selected production/wind time shift: +0 h
+CAPACITY FACTOR: gross 34.9%   net 34.2%   mean net energy 1,078 GWh/year
+APPARENT TIME AVAILABILITY: 98.8% (wind between 28.8 and 90.0 km/h, production below 1.0% of rated capacity)
+ENERGY CALIBRATION FACTOR: 98.0% (observed production / modelled production; may exceed 100% and is not technical availability)
+
+ESTABLISHED-OPERATION PERIOD USED PER FARM (ramp-up excluded):
+           Farm Established_regime_start  Hours_used  Total_hours  Share_used_pct
+  Saint-Nazaire               2023-03-01       29596        29596         100.000
+         Fécamp               2024-06-01       20311        25402          79.958
+   Saint-Brieuc               2024-06-01       20421        26490          77.089
+Yeu-Noirmoutier               2026-04-01        4405        10995          40.064
+
+REFERENCE FARMS (within the selected period):
+           Farm  Hours  Mean_wind_kmh  Observed_CF  Raw_model_CF  Apparent_time_availability  Energy_calibration_factor
+  Saint-Nazaire  29596         30.285        0.332         0.364                       0.975                      0.913
+         Fécamp  20311         30.820        0.382         0.390                       0.997                      0.981
+   Saint-Brieuc  20421         28.884        0.366         0.341                       0.995                      1.074
+Yeu-Noirmoutier   4405         24.640        0.258         0.247                       0.997                      1.045
+
+LEAVE-ONE-FARM-OUT VALIDATION:
+           Farm  Hours  Observed_CF  Predicted_CF  Bias_percentage_points  Hourly_correlation  Hourly_RMSE_pct_rated_capacity
+  Saint-Nazaire  29596        0.332         0.374                   4.168               0.884                          16.214
+         Fécamp  20311        0.382         0.381                  -0.117               0.916                          14.158
+   Saint-Brieuc  20421        0.366         0.322                  -4.436               0.904                          15.153
+Yeu-Noirmoutier   4405        0.258         0.242                  -1.663               0.898                          12.928
+
+REFERENCE SENSITIVITY (curve recalculated after removing each farm):
+   Farm_removed  Training_farms  Validated_min_wind_kmh  Validated_max_wind_kmh  Site_hours_outside_range_pct  Energy_calibration_factor_pct  Gross_CF_pct  Net_CF_pct  Net_CF_change_percentage_points
+  Saint-Nazaire               3                   2.700                  72.900                         0.830                         97.895        36.509      35.740                            1.571
+         Fécamp               3                   2.700                  80.100                         0.469                         98.395        34.673      34.117                           -0.053
+   Saint-Brieuc               3                   2.700                  80.100                         0.469                         97.773        33.765      33.013                           -1.156
+Yeu-Noirmoutier               3                   2.700                  80.100                         0.469                         97.885        34.815      34.079                           -0.091
+Net capacity factor range across farm-removal tests: 33.0–35.7 % (all reference farms: 34.2 %)
+
+VALIDATED REFERENCE WIND-SPEED RANGE: 2.70–80.10 km/h
+Site hours below range: 0.27%; above range: 0.20%.
+Share of modelled energy attributed to hours outside the range: 0.49 %.
+Sensitivity scenario only: net capacity factor would be 34.0% if production were zero above 80.10 km/h (actual high-wind behavior is unknown).
+
+PRODUCTION DATA COVERAGE (expected hours = hours in the wind file):
+           Farm  Expected_wind_hours  Production_hours  Missing_hours  Coverage_pct  Missing_periods  Longest_gap_hours                                                                                                                                      Main_gaps
+  Saint-Nazaire                31415             29596           1819        94.210              155                372    2023-08-29 22:00–2023-09-14 10:00 (372 hours); 2023-04-06 05:00–2023-04-16 00:00 (235 hours); 2023-08-01 00:00–2023-08-07 03:00 (147 hours)
+         Fécamp                31415             25402           6013        80.859               40               3626  2023-03-02 22:00–2023-08-01 00:00 (3626 hours); 2023-08-31 22:00–2023-11-01 00:00 (1466 hours); 2024-04-16 00:00–2024-05-15 14:00 (710 hours)
+   Saint-Brieuc                31415             26490           4925        84.323               62               2538 2023-03-02 22:00–2023-06-16 16:00 (2538 hours); 2023-09-18 03:00–2023-11-01 00:00 (1053 hours); 2023-06-19 15:00–2023-08-01 00:00 (1017 hours)
+Yeu-Noirmoutier                31415             10995          20420        34.999               10              20402      2023-03-02 22:00–2025-06-30 00:00 (20402 hours); 2026-10-01 13:00–2026-10-01 21:00 (8 hours); 2025-07-18 19:00–2025-07-18 21:00 (2 hours)
+
+COVERAGE BY YEAR:
+           Farm  Year  Production_hours  Expected_wind_hours  Coverage_pct
+  Saint-Nazaire  2023              5540                 7298        75.911
+  Saint-Nazaire  2024              8744                 8784        99.545
+  Saint-Nazaire  2025              8749                 8760        99.874
+  Saint-Nazaire  2026              6563                 6573        99.848
+         Fécamp  2023              2192                 7298        30.036
+         Fécamp  2024              7910                 8784        90.050
+         Fécamp  2025              8736                 8760        99.726
+         Fécamp  2026              6564                 6573        99.863
+   Saint-Brieuc  2023              2429                 7298        33.283
+   Saint-Brieuc  2024              8761                 8784        99.738
+   Saint-Brieuc  2025              8736                 8760        99.726
+   Saint-Brieuc  2026              6564                 6573        99.863
+Yeu-Noirmoutier  2023                 0                 7298         0.000
+Yeu-Noirmoutier  2024                 0                 8784         0.000
+Yeu-Noirmoutier  2025              4430                 8760        50.571
+Yeu-Noirmoutier  2026              6565                 6573        99.878
+
+LONGEST CONTINUOUS GAPS (up to 3 per farm):
+Saint-Nazaire: 2023-08-29 22:00–2023-09-14 10:00 (372 hours); 2023-04-06 05:00–2023-04-16 00:00 (235 hours); 2023-08-01 00:00–2023-08-07 03:00 (147 hours)
+Fécamp: 2023-03-02 22:00–2023-08-01 00:00 (3626 hours); 2023-08-31 22:00–2023-11-01 00:00 (1466 hours); 2024-04-16 00:00–2024-05-15 14:00 (710 hours)
+Saint-Brieuc: 2023-03-02 22:00–2023-06-16 16:00 (2538 hours); 2023-09-18 03:00–2023-11-01 00:00 (1053 hours); 2023-06-19 15:00–2023-08-01 00:00 (1017 hours)
+Yeu-Noirmoutier: 2023-03-02 22:00–2025-06-30 00:00 (20402 hours); 2026-10-01 13:00–2026-10-01 21:00 (8 hours); 2025-07-18 19:00–2025-07-18 21:00 (2 hours)
+
+SITE NET CAPACITY FACTOR BY YEAR:
+Year
+2016   38.700
+2017   31.800
+2018   32.800
+2019   34.600
+2020   39.000
+2021   32.600
+2022   32.100
+2023   37.100
+2024   31.800
+2025   31.200
+
+WARNINGS:
+ - Validation: capacity-factor bias reaches 4.4 percentage points for a held-out farm; site capacity-factor uncertainty may be of a similar order.
+ - Ramp-up excluded from the power-curve calculation: Fécamp (established operation from 2024-06-01, 80% of hours retained); Saint-Brieuc (established operation from 2024-06-01, 77% of hours retained); Yeu-Noirmoutier (established operation from 2026-04-01, 40% of hours retained)
+
+ASSUMPTIONS AND ESTIMATION ACCURACY:
+- Wind: ERA5 wind speed at 100 m is reported in km/h. Hourly wind is estimated as the mean of the values at both ends of the hour; hours missing either endpoint are excluded.
+- Reference production: mean hourly production divided by installed rated capacity. Negative values are set to zero; missing periods are neither interpolated nor treated as outages.
+- Ramp-up: established operation is detected when the 75th percentile of capacity factor is >= 0.90 at wind speeds of at least 43.2 km/h, for at least two consecutive months with at least 10 qualifying hours per month. This threshold is an empirical rule.
+- Power curve: median capacity factor in 1.8 km/h wind-speed bins, requiring at least 30 hours per bin; reference-farm values are averaged with weights proportional to hours. Empty bins are interpolated and values are smoothed with a three-bin moving average. The plateau above the last validated bin is an extrapolation, not measured turbine behavior.
+- Net power: empirical curve multiplied by a global energy calibration factor (98.0%), then capped at the site's rated capacity. This factor combines outages, curtailment, and model bias; it is not an independent measure of technical availability.
+- Capacity factor and equivalent annual energy: capacity factor is mean power divided by rated capacity. Annual energy shown annualizes this mean over 8,766 hours; it is not a measurement of energy produced in a calendar year.
+- Monthly panel: each point/bar is the mean over available hours for that calendar month, pooled across all years in the requested period. Power is shown as mean MW, not monthly energy in MWh.
+- Apparent time availability: share of hours with wind between 28.8 and 90.0 km/h for which capacity factor exceeds 1.0% of rated capacity. This does not measure machine availability from outage logs.
+- The model is most applicable to turbines, hub heights, sites, and conditions represented by the reference farms. Wake effects, hub-height differences, curtailment, and weather-product differences are not corrected separately.
+- Measured accuracy from leave-one-farm-out cross-validation: median absolute bias 2.92 capacity-factor percentage points, maximum absolute bias 4.44 points; hourly RMSE 12.9–16.2% of rated capacity; hourly correlation 0.88–0.92.
+- Accuracy limitation: validation uses the same farms and periods to tune parameters and assess performance by holding out one farm. It does not measure absolute weather errors and does not guarantee performance for a turbine or site outside these references.
+- Sensitivity to reference selection (one farm removed at a time, with no retraining on independent data): net capacity factor 33.01–35.74%, a change of -1.16 to +1.57 percentage points. This range is not a confidence interval.
+- Reference-production coverage: 35.0–94.2% across farms; potential bias from missing hours cannot be quantified without knowing their cause.
+- Interpretation: displayed decimal places reflect numerical precision, not guaranteed accuracy. Cross-validation and sensitivity above describe performance observed on the references only; they are not a confidence interval for a new site.
