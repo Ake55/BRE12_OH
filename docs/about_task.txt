@@ -1,0 +1,25 @@
+
+
+BRE12 What do French offshore wind farms really produce?
+Brest
+Organisation CEREMA (Site web: https://www.cerema.fr/fr) Climate, EnergySpatial planning
+Matthieu Suire
+
+
+As we electrify transport, industry and heating, we'll need far more electricity — 
+and it has to be clean. Offshore wind is one of France's strongest cards: powerful, 
+steady sea winds and the world's second-largest maritime area. But making the most of 
+it means knowing where to place farms and being able to predict what they'll actually generate. 
+
+And here's the blind spot: today we rely on theoretical power curves — built from models and wind-tunnel tests on a single isolated turbine. 
+A real farm at sea behaves very differently, shaped by wake effects between turbines, wind direction, maintenance and more. The gap between theory and reality is barely documented, 
+yet we plan and subsidise a multi-billion-euro industry on it. This challenge is about closing that gap: for the first time, years of real hourly production from France's offshore farms are openly available, 
+and by crossing them with open wind data we can reconstruct what these farms truly produce — and 
+understand why reality drifts from the model. The goal is an open, reproducible look at the real 
+performance of offshore wind, turning "we assume" into "we measured."
+
+What the challenge owner would like to develop over 48h
+An interactive dashboard plotting production-vs-wind scatter points 
+and the reconstructed real power curve for each French offshore wind farm, 
+with complementary analyses added as time allows (wake effects by wind direction, 
+comparison with the theoretical curve, cross-farm smoothing).
