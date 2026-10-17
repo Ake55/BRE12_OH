@@ -1,6 +1,6 @@
 SITE: 60 x 6.0 MW = 360 MW   |   selected production/wind time shift: +0 h
 CAPACITY FACTOR: gross 34.9%   net 34.2%   mean net energy 1,078 GWh/year
-APPARENT TIME AVAILABILITY: 98.8% (wind between 8.0 and 25 m/s, production below 1.0% of rated capacity)
+APPARENT TIME AVAILABILITY: 98.8% (wind between 28.8 and 90.0 km/h, production below 1.0% of rated capacity)
 ENERGY CALIBRATION FACTOR: 98.0% (observed production / modelled production; may exceed 100% and is not technical availability)
 
 ESTABLISHED-OPERATION PERIOD USED PER FARM (ramp-up excluded):
@@ -11,11 +11,11 @@ ESTABLISHED-OPERATION PERIOD USED PER FARM (ramp-up excluded):
 Yeu-Noirmoutier               2026-04-01        4405        10995          40.064
 
 REFERENCE FARMS (within the selected period):
-           Farm  Hours  Mean_wind_m_s  Observed_CF  Raw_model_CF  Apparent_time_availability  Energy_calibration_factor
-  Saint-Nazaire  29596          8.412        0.332         0.364                       0.975                      0.913
-         Fécamp  20311          8.561        0.382         0.390                       0.997                      0.981
-   Saint-Brieuc  20421          8.023        0.366         0.341                       0.995                      1.074
-Yeu-Noirmoutier   4405          6.844        0.258         0.247                       0.997                      1.045
+           Farm  Hours  Mean_wind_kmh  Observed_CF  Raw_model_CF  Apparent_time_availability  Energy_calibration_factor
+  Saint-Nazaire  29596         30.285        0.332         0.364                       0.975                      0.913
+         Fécamp  20311         30.820        0.382         0.390                       0.997                      0.981
+   Saint-Brieuc  20421         28.884        0.366         0.341                       0.995                      1.074
+Yeu-Noirmoutier   4405         24.640        0.258         0.247                       0.997                      1.045
 
 LEAVE-ONE-FARM-OUT VALIDATION:
            Farm  Hours  Observed_CF  Predicted_CF  Bias_percentage_points  Hourly_correlation  Hourly_RMSE_pct_rated_capacity
@@ -25,17 +25,17 @@ LEAVE-ONE-FARM-OUT VALIDATION:
 Yeu-Noirmoutier   4405        0.258         0.242                  -1.663               0.898                          12.928
 
 REFERENCE SENSITIVITY (curve recalculated after removing each farm):
-   Farm_removed  Training_farms  Validated_min_wind_m_s  Validated_max_wind_m_s  Site_hours_outside_range_pct  Energy_calibration_factor_pct  Gross_CF_pct  Net_CF_pct  Net_CF_change_percentage_points
-  Saint-Nazaire               3                   0.750                  20.250                         0.830                         97.895        36.509      35.740                            1.571
-         Fécamp               3                   0.750                  22.250                         0.469                         98.395        34.673      34.117                           -0.053
-   Saint-Brieuc               3                   0.750                  22.250                         0.469                         97.773        33.765      33.013                           -1.156
-Yeu-Noirmoutier               3                   0.750                  22.250                         0.469                         97.885        34.815      34.079                           -0.091
+   Farm_removed  Training_farms  Validated_min_wind_kmh  Validated_max_wind_kmh  Site_hours_outside_range_pct  Energy_calibration_factor_pct  Gross_CF_pct  Net_CF_pct  Net_CF_change_percentage_points
+  Saint-Nazaire               3                   2.700                  72.900                         0.830                         97.895        36.509      35.740                            1.571
+         Fécamp               3                   2.700                  80.100                         0.469                         98.395        34.673      34.117                           -0.053
+   Saint-Brieuc               3                   2.700                  80.100                         0.469                         97.773        33.765      33.013                           -1.156
+Yeu-Noirmoutier               3                   2.700                  80.100                         0.469                         97.885        34.815      34.079                           -0.091
 Net capacity factor range across farm-removal tests: 33.0–35.7 % (all reference farms: 34.2 %)
 
-VALIDATED REFERENCE WIND-SPEED RANGE: 0.75–22.25 m/s
+VALIDATED REFERENCE WIND-SPEED RANGE: 2.70–80.10 km/h
 Site hours below range: 0.27%; above range: 0.20%.
 Share of modelled energy attributed to hours outside the range: 0.49 %.
-Sensitivity scenario only: net capacity factor would be 34.0% if production were zero above 22.25 m/s (actual high-wind behavior is unknown).
+Sensitivity scenario only: net capacity factor would be 34.0% if production were zero above 80.10 km/h (actual high-wind behavior is unknown).
 
 PRODUCTION DATA COVERAGE (expected hours = hours in the wind file):
            Farm  Expected_wind_hours  Production_hours  Missing_hours  Coverage_pct  Missing_periods  Longest_gap_hours                                                                                                                                      Main_gaps
@@ -87,14 +87,14 @@ WARNINGS:
  - Ramp-up excluded from the power-curve calculation: Fécamp (established operation from 2024-06-01, 80% of hours retained); Saint-Brieuc (established operation from 2024-06-01, 77% of hours retained); Yeu-Noirmoutier (established operation from 2026-04-01, 40% of hours retained)
 
 ASSUMPTIONS AND ESTIMATION ACCURACY:
-- Wind: ERA5 wind speed at 100 m, in m/s. Hourly wind is estimated as the mean of the values at both ends of the hour; hours missing either endpoint are excluded.
+- Wind: ERA5 wind speed at 100 m is reported in km/h. Hourly wind is estimated as the mean of the values at both ends of the hour; hours missing either endpoint are excluded.
 - Reference production: mean hourly production divided by installed rated capacity. Negative values are set to zero; missing periods are neither interpolated nor treated as outages.
-- Ramp-up: established operation is detected when the 75th percentile of capacity factor is >= 0.90 at wind speeds of at least 12 m/s, for at least two consecutive months with at least 10 qualifying hours per month. This threshold is an empirical rule.
-- Power curve: median capacity factor in 0.5 m/s wind-speed bins, requiring at least 30 hours per bin; reference-farm values are averaged with weights proportional to hours. Empty bins are interpolated and values are smoothed with a three-bin moving average. The plateau above the last validated bin is an extrapolation, not measured turbine behavior.
+- Ramp-up: established operation is detected when the 75th percentile of capacity factor is >= 0.90 at wind speeds of at least 43.2 km/h, for at least two consecutive months with at least 10 qualifying hours per month. This threshold is an empirical rule.
+- Power curve: median capacity factor in 1.8 km/h wind-speed bins, requiring at least 30 hours per bin; reference-farm values are averaged with weights proportional to hours. Empty bins are interpolated and values are smoothed with a three-bin moving average. The plateau above the last validated bin is an extrapolation, not measured turbine behavior.
 - Net power: empirical curve multiplied by a global energy calibration factor (98.0%), then capped at the site's rated capacity. This factor combines outages, curtailment, and model bias; it is not an independent measure of technical availability.
 - Capacity factor and equivalent annual energy: capacity factor is mean power divided by rated capacity. Annual energy shown annualizes this mean over 8,766 hours; it is not a measurement of energy produced in a calendar year.
 - Monthly panel: each point/bar is the mean over available hours for that calendar month, pooled across all years in the requested period. Power is shown as mean MW, not monthly energy in MWh.
-- Apparent time availability: share of hours with wind between 8.0 and 25 m/s for which capacity factor exceeds 1.0% of rated capacity. This does not measure machine availability from outage logs.
+- Apparent time availability: share of hours with wind between 28.8 and 90.0 km/h for which capacity factor exceeds 1.0% of rated capacity. This does not measure machine availability from outage logs.
 - The model is most applicable to turbines, hub heights, sites, and conditions represented by the reference farms. Wake effects, hub-height differences, curtailment, and weather-product differences are not corrected separately.
 - Measured accuracy from leave-one-farm-out cross-validation: median absolute bias 2.92 capacity-factor percentage points, maximum absolute bias 4.44 points; hourly RMSE 12.9–16.2% of rated capacity; hourly correlation 0.88–0.92.
 - Accuracy limitation: validation uses the same farms and periods to tune parameters and assess performance by holding out one farm. It does not measure absolute weather errors and does not guarantee performance for a turbine or site outside these references.

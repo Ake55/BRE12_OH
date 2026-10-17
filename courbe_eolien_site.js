@@ -8,6 +8,7 @@ const crypto = require("node:crypto");
 const EDGES = Array.from({ length: 61 }, (_, i) => i * 0.5);
 const CENTERS = EDGES.slice(0, -1).map((v) => v + 0.25);
 const HOUR_MS = 3_600_000;
+const MS_TO_KMH = 3.6;
 const METERS_PER_TILE_EQUATOR = 40_075_016.686 / 256;
 const SOURCES = {
   eox2016: {
@@ -88,6 +89,7 @@ Options:
   --outdir DIR             Output directory (default sortie_site_js)
   --min-heures N           Minimum observations per wind bin (default 30)
   --seuil-regime N         Established-operation threshold; 0 disables it
+  --v-ok N                 Apparent-availability threshold in m/s (default 8)
   --sans-satellite         Skip satellite tiles
   --rayon-km N             Satellite radius, 0 < N <= 500 (default 200)
   --source-sat NAME        eox2016, eox2024, or esri
@@ -547,8 +549,8 @@ function warnings(farms, opts, res) {
   const low = Math.min(...farms.map((f) => f.mw_per_turbine));
   const high = Math.max(...farms.map((f) => f.mw_per_turbine));
   if (opts.mw < 0.75 * low || opts.mw > 1.25 * high) out.push(`Unit rated power ${opts.mw} MW is outside the reference range (${low}-${high} MW); treat the result as an order-of-magnitude estimate.`);
-  if (res.abovePct > 1) out.push(`${res.abovePct.toFixed(1)}% of site hours exceed validated wind range up to ${res.vmax.toFixed(1)} m/s; the curve assumes a plateau.`);
-  if (res.belowPct > 1) out.push(`${res.belowPct.toFixed(1)}% of site hours are below the validated range starting at ${res.vmin.toFixed(1)} m/s.`);
+  if (res.abovePct > 1) out.push(`${res.abovePct.toFixed(1)}% of site hours exceed validated wind range up to ${(res.vmax * MS_TO_KMH).toFixed(1)} km/h; the curve assumes a plateau.`);
+  if (res.belowPct > 1) out.push(`${res.belowPct.toFixed(1)}% of site hours are below the validated range starting at ${(res.vmin * MS_TO_KMH).toFixed(1)} km/h.`);
   if (res.energyCalibration > 1) out.push(`Energy calibration is ${(100 * res.energyCalibration).toFixed(1)}%; it is not technical availability.`);
   const maxBias = Math.max(...res.validation.map((v) => Math.abs(v.biasPoints)));
   if (maxBias > 3) out.push(`Leave-one-farm-out capacity-factor bias reaches ${maxBias.toFixed(1)} percentage points.`);
@@ -579,25 +581,25 @@ function makeReport(opts, res, warns) {
   const lines = [
     `SITE: ${opts.n} x ${opts.mw} MW = ${res.rated.toFixed(0)} MW | selected production/wind time shift: ${res.lag >= 0 ? "+" : ""}${res.lag} h`,
     `CAPACITY FACTOR: gross ${(100 * res.grossCf).toFixed(1)}% net ${(100 * res.netCf).toFixed(1)}% | mean net energy ${(res.site.reduce((s, d) => s + d.net, 0) / res.site.length * 8766 / 1000).toFixed(0)} GWh/year`,
-    `APPARENT TIME AVAILABILITY: ${(100 * res.timeAvailability).toFixed(1)}% (wind ${opts.vOk.toFixed(1)}–25 m/s, production below ${(100 * opts.stopThreshold).toFixed(1)}% of rated capacity)`,
+    `APPARENT TIME AVAILABILITY: ${(100 * res.timeAvailability).toFixed(1)}% (wind ${(opts.vOk * MS_TO_KMH).toFixed(1)}–${(25 * MS_TO_KMH).toFixed(1)} km/h, production below ${(100 * opts.stopThreshold).toFixed(1)}% of rated capacity)`,
     `ENERGY CALIBRATION FACTOR: ${(100 * res.energyCalibration).toFixed(1)}% (observed/modelled reference production; not technical availability)`,
     "",
     "ESTABLISHED-OPERATION PERIOD USED PER FARM (ramp-up excluded):",
     renderTable(["Farm", "Established start", "Hours used", "Total hours", "Share used %"], res.windows.map((v) => [v.farm, v.start, v.used, v.total, format(v.total ? 100 * v.used / v.total : NaN, 1)])),
     "",
     "REFERENCE FARMS:",
-    renderTable(["Farm", "Hours", "Mean wind m/s", "Observed CF", "Raw model CF", "Apparent availability", "Energy calibration"], res.ref.map((v) => [v.farm, v.hours, format(v.meanWind), format(v.observedCf), format(v.rawModelCf), format(v.timeAvailability), format(v.energyCalibration)])),
+    renderTable(["Farm", "Hours", "Mean wind km/h", "Observed CF", "Raw model CF", "Apparent availability", "Energy calibration"], res.ref.map((v) => [v.farm, v.hours, format(v.meanWind * MS_TO_KMH), format(v.observedCf), format(v.rawModelCf), format(v.timeAvailability), format(v.energyCalibration)])),
     "",
     "LEAVE-ONE-FARM-OUT VALIDATION:",
     renderTable(["Farm", "Hours", "Observed CF", "Predicted CF", "Bias points", "Hourly correlation", "Hourly RMSE % Pnom"], res.validation.map((v) => [v.farm, v.hours, format(v.observed), format(v.predicted), format(v.biasPoints, 2), format(v.correlation), format(v.rmsePct, 2)])),
     "",
     "REFERENCE SENSITIVITY (each farm removed in turn):",
-    renderTable(["Farm removed", "Training farms", "Validated min", "Validated max", "Site hours outside %", "Calibration %", "Gross CF %", "Net CF %", "Net CF change points"], res.sensitivity.map((v) => [v.removed, v.farms, format(v.min, 2), format(v.max, 2), format(v.outsidePct, 2), format(v.calibrationPct, 2), format(v.grossCfPct, 2), format(v.netCfPct, 2), format(v.changePoints, 2)])),
+    renderTable(["Farm removed", "Training farms", "Validated min km/h", "Validated max km/h", "Site hours outside %", "Calibration %", "Gross CF %", "Net CF %", "Net CF change points"], res.sensitivity.map((v) => [v.removed, v.farms, format(v.min * MS_TO_KMH, 2), format(v.max * MS_TO_KMH, 2), format(v.outsidePct, 2), format(v.calibrationPct, 2), format(v.grossCfPct, 2), format(v.netCfPct, 2), format(v.changePoints, 2)])),
     "",
-    `VALIDATED REFERENCE WIND-SPEED RANGE: ${res.vmin.toFixed(2)}–${res.vmax.toFixed(2)} m/s`,
+    `VALIDATED REFERENCE WIND-SPEED RANGE: ${(res.vmin * MS_TO_KMH).toFixed(2)}–${(res.vmax * MS_TO_KMH).toFixed(2)} km/h`,
     `Site hours below range: ${res.belowPct.toFixed(2)}%; above range: ${res.abovePct.toFixed(2)}%.`,
     `Modelled energy outside the range: ${format(res.outsideEnergyPct, 2)}%.`,
-    `Sensitivity only: net capacity factor would be ${(100 * res.netCfNoHighExtrapolation).toFixed(1)}% if power were zero above ${res.vmax.toFixed(2)} m/s.`,
+    `Sensitivity only: net capacity factor would be ${(100 * res.netCfNoHighExtrapolation).toFixed(1)}% if power were zero above ${(res.vmax * MS_TO_KMH).toFixed(2)} km/h.`,
     "",
     "PRODUCTION DATA COVERAGE (expected hours = hours in reference wind file):",
     renderTable(["Farm", "Expected wind hours", "Production hours", "Missing hours", "Coverage %", "Missing periods", "Longest gap h"], res.coverage.map((v) => [v.farm, v.expected, v.present, v.missing, format(v.coveragePct, 2), v.missingPeriods, v.longestGap])),
@@ -613,13 +615,13 @@ function makeReport(opts, res, warns) {
     "",
     ...(warns.length ? ["WARNINGS:", ...warns.map((w) => ` - ${w}`), ""] : []),
     "ASSUMPTIONS AND ESTIMATION ACCURACY:",
-    "- ERA5/Open-Meteo hourly wind at 100 m is averaged between the hour's endpoints; hourly production is aligned to this interval.",
-    "- The reference curve uses 0.5 m/s bins, farm-level median capacity factors, a 30-observation default minimum, hour weighting, interpolation and three-bin smoothing.",
-    "- Established-operation filtering uses the 75th percentile of capacity factor above 12 m/s; two consecutive qualifying months with at least 10 observations each are required (default threshold 0.90).",
+    "- ERA5/Open-Meteo hourly wind at 100 m is reported in km/h and averaged between the hour's endpoints; hourly production is aligned to this interval.",
+    `- The reference curve uses ${(0.5 * MS_TO_KMH).toFixed(1)} km/h bins, farm-level median capacity factors, a 30-observation default minimum, hour weighting, interpolation and three-bin smoothing.`,
+    `- Established-operation filtering uses the 75th percentile of capacity factor above ${(12 * MS_TO_KMH).toFixed(1)} km/h; two consecutive qualifying months with at least 10 observations each are required (default threshold 0.90).`,
     "- Above the validated wind range the curve is held at its final value; high-wind storm shutdown is not modelled.",
     "- Apparent time availability and the energy calibration factor absorb data gaps, outages and model bias; neither is measured technical availability.",
     "- Leave-one-farm-out validation and reference sensitivity describe transfer uncertainty. Reference validation biases of several capacity-factor points are plausible; do not interpret decimal precision as forecast accuracy.",
-    "- ERA5 has roughly 31 km grid spacing and can have multi-m/s hourly wind errors offshore. Reference turbine hub heights are near 100 m; shear to higher hubs is not corrected.",
+    "- ERA5 has roughly 31 km grid spacing and can have hourly wind errors of several km/h or more offshore. Reference turbine hub heights are near 100 m; shear to higher hubs is not corrected.",
     "- Wake losses and curtailment are implicit in reference production. Negative reference production is clipped to zero; individual farm datasets are not jointly filtered.",
     "- Satellite imagery locates the site only; it does not show individual turbines. EOX/Esri attribution and licensing are included on the figure; eox2024 is non-commercial/share-alike.",
   ];
@@ -641,9 +643,9 @@ function chartSvg(opts, res, satellite) {
     `<rect width="${width}" height="${height}" fill="white"/>`,
     `<style>text{font-family:Arial,sans-serif;fill:#222}.small{font-size:12px}.axis{font-size:13px}.title{font-size:18px;font-weight:bold}</style>`,
     `<text x="${width / 2}" y="32" text-anchor="middle" font-size="22" font-weight="bold">${xmlEscape(`Site (${opts.lat.toFixed(3)}°N, ${opts.lon.toFixed(3)}°E) — net CF ${(100 * res.netCf).toFixed(1)}% — ${(res.site.reduce((s, d) => s + d.net, 0) / res.site.length * 8766 / 1000).toFixed(0)} GWh/year — ERA5 + ${res.ref.length} reference farms`)}</text>`];
-  const p0 = panels[0], xWind = (v) => p0.x + (v / 30) * p0.w, yPower = (p) => plotY + plotH - (p / res.rated) * plotH;
+  const p0 = panels[0], xWind = (v) => p0.x + (v / (30 * MS_TO_KMH)) * p0.w, yPower = (p) => plotY + plotH - (p / res.rated) * plotH;
   out.push(`<text class="title" x="${p0.x + p0.w / 2}" y="88" text-anchor="middle">Site power curve (${res.rated.toFixed(0)} MW)</text>`);
-  for (let v = 0; v <= 30; v += 5) {
+  for (let v = 0; v <= 30 * MS_TO_KMH; v += 18) {
     out.push(svgLine(xWind(v), plotY, xWind(v), plotY + plotH, "#e5e5e5"));
     out.push(`<text class="small" x="${xWind(v)}" y="${plotY + plotH + 20}" text-anchor="middle">${v}</text>`);
   }
@@ -651,23 +653,23 @@ function chartSvg(opts, res, satellite) {
     out.push(svgLine(p0.x, yPower(p * res.rated), p0.x + p0.w, yPower(p * res.rated), "#e5e5e5"));
     out.push(`<text class="small" x="${p0.x - 8}" y="${yPower(p * res.rated) + 4}" text-anchor="end">${(p * res.rated).toFixed(0)}</text>`);
   }
-  const area = res.curve.map((_, i) => `${xWind(CENTERS[i])},${yPower(res.rated * res.max[i])}`).join(" ") + " " +
-    res.curve.map((_, j) => res.curve.length - j - 1).map((i) => `${xWind(CENTERS[i])},${yPower(res.rated * res.min[i])}`).join(" ");
+  const area = res.curve.map((_, i) => `${xWind(CENTERS[i] * MS_TO_KMH)},${yPower(res.rated * res.max[i])}`).join(" ") + " " +
+    res.curve.map((_, j) => res.curve.length - j - 1).map((i) => `${xWind(CENTERS[i] * MS_TO_KMH)},${yPower(res.rated * res.min[i])}`).join(" ");
   out.push(`<polygon points="${area}" fill="#9ecae1" opacity=".45"/>`);
-  const curvePath = (factor) => res.curve.map((v, i) => `${i ? "L" : "M"}${xWind(CENTERS[i]).toFixed(2)},${yPower(res.rated * v * factor).toFixed(2)}`).join(" ");
+  const curvePath = (factor) => res.curve.map((v, i) => `${i ? "L" : "M"}${xWind(CENTERS[i] * MS_TO_KMH).toFixed(2)},${yPower(res.rated * v * factor).toFixed(2)}`).join(" ");
   out.push(`<path d="${curvePath(1)}" fill="none" stroke="#2171b5" stroke-width="3"/>`,
     `<path d="${curvePath(res.energyCalibration)}" fill="none" stroke="#cb181d" stroke-width="2.5" stroke-dasharray="8 5"/>`,
-    svgLine(xWind(res.vmax), plotY, xWind(res.vmax), plotY + plotH, "#777", 1.5, "3 4"),
-    `<text class="axis" x="${p0.x + p0.w / 2}" y="${plotY + plotH + 48}" text-anchor="middle">Wind speed at 100 m (m/s)</text>`,
+    svgLine(xWind(res.vmax * MS_TO_KMH), plotY, xWind(res.vmax * MS_TO_KMH), plotY + plotH, "#777", 1.5, "3 4"),
+    `<text class="axis" x="${p0.x + p0.w / 2}" y="${plotY + plotH + 48}" text-anchor="middle">Wind speed at 100 m (km/h)</text>`,
     `<text class="small" x="${p0.x + 6}" y="${plotY + 18}" fill="#2171b5">Gross</text>`,
     `<text class="small" x="${p0.x + 70}" y="${plotY + 18}" fill="#cb181d">Net (calibration ${res.energyCalibration.toFixed(3)})</text>`);
 
-  const siteWind = res.site.map((d) => d.wind);
+  const siteWind = res.site.map((d) => d.wind * MS_TO_KMH);
   const meanWind = mean(siteWind);
   const p1 = panels[1], histTop = plotY, histH = plotH;
   out.push(`<text class="title" x="${p1.x + p1.w / 2}" y="88" text-anchor="middle">Site wind (ERA5)</text>`);
   const hist = Array(30).fill(0);
-  for (const v of siteWind) if (v >= 0 && v < 30) hist[Math.floor(v)] += 1;
+  for (const v of siteWind) if (v >= 0 && v < 30 * MS_TO_KMH) hist[Math.floor(v / MS_TO_KMH)] += 1;
   const maxHist = Math.max(...hist, 1);
   for (let i = 0; i < hist.length; i += 1) {
     const bw = p1.w / 30;
@@ -675,8 +677,8 @@ function chartSvg(opts, res, satellite) {
     out.push(`<rect x="${p1.x + i * bw}" y="${histTop + histH - h}" width="${bw - 1}" height="${h}" fill="#41b6c4"/>`);
   }
   out.push(svgLine(p1.x, histTop + histH, p1.x + p1.w, histTop + histH, "#333"),
-    `<text class="small" x="${p1.x + p1.w / 2}" y="${plotY + plotH + 20}" text-anchor="middle">Wind speed (m/s)</text>`,
-    `<text class="small" x="${p1.x + p1.w / 2}" y="${plotY + 24}" text-anchor="middle">Mean ${meanWind.toFixed(2)} m/s · ${siteWind.length} hours</text>`);
+    `<text class="small" x="${p1.x + p1.w / 2}" y="${plotY + plotH + 20}" text-anchor="middle">Wind speed (km/h)</text>`,
+    `<text class="small" x="${p1.x + p1.w / 2}" y="${plotY + 24}" text-anchor="middle">Mean ${meanWind.toFixed(2)} km/h · ${siteWind.length} hours</text>`);
 
   const p2 = panels[2], monthlyWind = Array(12).fill(0), monthlyPower = Array(12).fill(0), monthlyCount = Array(12).fill(0);
   for (const d of res.site) {
@@ -821,11 +823,11 @@ async function main() {
   }
   fs.mkdirSync(opts.outDir, { recursive: true });
   writeCsv(path.join(opts.outDir, "courbe_puissance.csv"),
-    ["vent_ms", "P_MW_brut", "P_MW_net", "P_MW_min_parcs", "P_MW_max_parcs", "heures_ref"],
-    CENTERS.map((v, i) => [v, res.rated * res.curve[i], res.rated * res.curve[i] * res.energyCalibration, res.rated * res.min[i], res.rated * res.max[i], res.counts[i]]));
+    ["vent_kmh", "P_MW_brut", "P_MW_net", "P_MW_min_parcs", "P_MW_max_parcs", "heures_ref"],
+    CENTERS.map((v, i) => [v * MS_TO_KMH, res.rated * res.curve[i], res.rated * res.curve[i] * res.energyCalibration, res.rated * res.min[i], res.rated * res.max[i], res.counts[i]]));
   writeCsv(path.join(opts.outDir, "serie_horaire_site.csv"),
-    ["timestamp_utc", "vent_100m_ms", "P_brute_MW", "P_nette_MW"],
-    res.site.map((d) => [new Date(d.t).toISOString(), d.wind, d.gross, d.net]));
+    ["timestamp_utc", "vent_100m_kmh", "P_brute_MW", "P_nette_MW"],
+    res.site.map((d) => [new Date(d.t).toISOString(), d.wind * MS_TO_KMH, d.gross, d.net]));
   fs.writeFileSync(path.join(opts.outDir, "resume.txt"), makeReport(opts, res, warns), "utf8");
   fs.writeFileSync(path.join(opts.outDir, "courbe_site.svg"), chartSvg(opts, res, satellite), "utf8");
   console.log(makeReport(opts, res, warns));

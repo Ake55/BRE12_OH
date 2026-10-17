@@ -5,11 +5,12 @@ courbe_eolien_site.py
 =====================
 Entrée : un point GPS, un nombre d'éoliennes, une puissance par éolienne.
 Sortie : courbe puissance = f(vent à 100 m), facteur de charge, disponibilité, série horaire, graphique PNG.
+Les vitesses de vent des sorties sont exprimées en km/h (calculs internes en m/s).
 Le graphique inclut aussi une vue satellite centrée sur le site, de rayon fixe 200 km.
 
 MÉTHODE
 -------
- 1. Vent à 100 m (= hauteur de moyeu supposée) : Open-Meteo archive, modèle ERA5, m/s, UTC, au point GPS.
+ 1. Vent à 100 m (= hauteur de moyeu supposée) : Open-Meteo archive, modèle ERA5, en m/s en interne, UTC, au point GPS.
  2. Pour chaque parc de référence (farms_reference.json) : vent horaire lu dans data/<nom>_hourly_data.csv
     (nom ou colonne du JSON) croisé avec sa production horaire réelle ÷ sa puissance installée (= CF).
     [v2] Le vent ERA5 est instantané à l'heure pile alors que la production est une moyenne sur l'heure : on utilise
@@ -84,6 +85,7 @@ import pandas as pd  # noqa: E402
 
 EDGES = np.arange(0.0, 30.5, 0.5)
 CENTERS = EDGES[:-1] + 0.25
+MS_TO_KMH = 3.6
 URL = "https://archive-api.open-meteo.com/v1/archive"
 RAYON_SATELLITE_KM = 200
 class DonneeManquante(Exception):
@@ -718,11 +720,11 @@ def avertissements(parcs, mw, res):
         w.append(f"Unit rated power {mw} MW is outside the reference range ({lo}-{hi} MW): the actual power-curve "
                  "shape will differ (L2); treat the result as an order-of-magnitude estimate.")
     if res["part_heures_au_dela"] > 0.01:
-        w.append(f"{100 * res['part_heures_au_dela']:.1f}% of site hours have wind > {res['vmax_valide']:.1f} m/s, "
+        w.append(f"{100 * res['part_heures_au_dela']:.1f}% of site hours have wind > {res['vmax_valide'] * MS_TO_KMH:.1f} km/h, "
                  "beyond reference data: a plateau is assumed (no storm shutdown is modelled).")
     if res["part_heures_sous_plage"] > 0.01:
         w.append(f"{100 * res['part_heures_sous_plage']:.1f}% of site hours have wind < "
-                 f"{res['vmin_valide']:.1f} m/s, below the reference range.")
+                 f"{res['vmin_valide'] * MS_TO_KMH:.1f} km/h, below the reference range.")
     if res["A_energie"] > 1:
         w.append(f"The energy calibration factor is {100 * res['A_energie']:.1f}%: "
                  "it may cause modelled power to exceed gross power and does not represent availability.")
@@ -752,30 +754,30 @@ def tracer(res, n, mw, lat, lon, path, satellite):
     ax = [fig.add_subplot(grille[0, i]) for i in range(3)]
     ax_satellite = fig.add_subplot(grille[1, :])
     a = ax[0]
-    a.axvspan(0, res["vmin_valide"], color="grey", alpha=.12, label="outside validated wind range")
-    a.axvspan(res["vmax_valide"], EDGES[-1], color="grey", alpha=.12)
+    a.axvspan(0, res["vmin_valide"] * MS_TO_KMH, color="grey", alpha=.12, label="outside validated wind range")
+    a.axvspan(res["vmax_valide"] * MS_TO_KMH, EDGES[-1] * MS_TO_KMH, color="grey", alpha=.12)
     support = (CENTERS >= res["vmin_valide"]) & (CENTERS <= res["vmax_valide"])
-    a.fill_between(CENTERS[support], pn * res["mn"][support], pn * res["mx"][support],
+    a.fill_between(CENTERS[support] * MS_TO_KMH, pn * res["mn"][support], pn * res["mx"][support],
                    alpha=.2, color="tab:blue", label="reference-farm min–max range")
-    a.plot(CENTERS[support], pn * res["courbe"][support], color="tab:blue", lw=2,
+    a.plot(CENTERS[support] * MS_TO_KMH, pn * res["courbe"][support], color="tab:blue", lw=2,
            label="curve within validated range")
-    a.plot(CENTERS[support], pn * res["courbe"][support] * res["A_energie"], "--",
+    a.plot(CENTERS[support] * MS_TO_KMH, pn * res["courbe"][support] * res["A_energie"], "--",
            color="tab:red", lw=1.6,
            label=f"net (energy calibration factor = {res['A_energie']:.3f})")
-    a.axvline(res["vmax_valide"], color="grey", ls=":", lw=1); a.text(res["vmax_valide"], pn * .02, " end of data", color="grey", fontsize=8)
-    a.axvline(res["vmin_valide"], color="grey", ls=":", lw=1)
-    a.set_xlabel("Wind speed at 100 m (m/s)"); a.set_ylabel("Power (MW)")
+    a.axvline(res["vmax_valide"] * MS_TO_KMH, color="grey", ls=":", lw=1); a.text(res["vmax_valide"] * MS_TO_KMH, pn * .02, " end of data", color="grey", fontsize=8)
+    a.axvline(res["vmin_valide"] * MS_TO_KMH, color="grey", ls=":", lw=1)
+    a.set_xlabel("Wind speed at 100 m (km/h)"); a.set_ylabel("Power (MW)")
     a.set_title(f"Site power curve\n{n} x {mw} MW = {pn:.0f} MW"); a.grid(alpha=.3); a.legend(fontsize=8, loc="lower right")
-    b = ax[1]; v = res["site"]["vent_100m_ms"]
-    b.hist(v, bins=np.arange(0, 30, 1), color="tab:cyan", edgecolor="white")
-    b.axvline(v.mean(), color="k", ls="--"); b.set_title(f"Site wind (ERA5)\nmean {v.mean():.2f} m/s"); b.set_xlabel("m/s"); b.set_ylabel("Hours")
+    b = ax[1]; v = res["site"]["vent_100m_ms"] * MS_TO_KMH
+    b.hist(v, bins=np.arange(0, 30 * MS_TO_KMH + 1e-9, MS_TO_KMH), color="tab:cyan", edgecolor="white")
+    b.axvline(v.mean(), color="k", ls="--"); b.set_title(f"Site wind (ERA5)\nmean {v.mean():.2f} km/h"); b.set_xlabel("km/h"); b.set_ylabel("Hours")
     c = ax[2]
     monthly_wind = v.groupby(v.index.month).mean().reindex(range(1, 13))
     monthly_power = res["site"]["P_nette_MW"].groupby(res["site"].index.month).mean().reindex(range(1, 13))
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     c.bar(range(1, 13), monthly_wind, color="tab:cyan", edgecolor="white", label="mean wind speed")
     c.set_xticks(range(1, 13), months)
-    c.set_xlabel("Month"); c.set_ylabel("Mean wind speed (m/s)", color="tab:cyan")
+    c.set_xlabel("Month"); c.set_ylabel("Mean wind speed (km/h)", color="tab:cyan")
     c.tick_params(axis="y", labelcolor="tab:cyan")
     c2 = c.twinx()
     c2.plot(range(1, 13), monthly_power, color="tab:green", marker="o", lw=2,
@@ -806,7 +808,7 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
     L.append(f"CAPACITY FACTOR: gross {100 * res['FC_brut']:.1f}%   net {100 * res['FC_net']:.1f}%   "
              f"mean net energy {res['site'].P_nette_MW.sum() / len(res['site']) * 8766 / 1000:,.0f} GWh/year")
     L.append(f"APPARENT TIME AVAILABILITY: {100 * res['A_temps']:.1f}% "
-             f"(wind between {res['v_ok']:.1f} and 25 m/s, production below "
+             f"(wind between {res['v_ok'] * MS_TO_KMH:.1f} and {25 * MS_TO_KMH:.1f} km/h, production below "
              f"{100 * res['seuil_arret']:.1f}% of rated capacity)")
     L.append(f"ENERGY CALIBRATION FACTOR: {100 * res['A_energie']:.1f}% "
              "(observed production / modelled production; may exceed 100% and is not technical availability)")
@@ -819,10 +821,12 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
         "part_utilisee_pct": "Share_used_pct",
     }).to_string(index=False))
     L.append("\nREFERENCE FARMS (within the selected period):")
-    L.append(res["ref"].rename(columns={
+    ref = res["ref"].copy()
+    ref["vent_moyen"] *= MS_TO_KMH
+    L.append(ref.rename(columns={
         "parc": "Farm",
         "heures": "Hours",
-        "vent_moyen": "Mean_wind_m_s",
+        "vent_moyen": "Mean_wind_kmh",
         "FC_observe": "Observed_CF",
         "FC_modele_brut": "Raw_model_CF",
         "disponibilite_temps_apparente": "Apparent_time_availability",
@@ -839,11 +843,14 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
         "RMSE_horaire_pct_Pnom": "Hourly_RMSE_pct_rated_capacity",
     }).to_string(index=False))
     L.append("\nREFERENCE SENSITIVITY (curve recalculated after removing each farm):")
-    L.append(res["sensibilite_references"].rename(columns={
+    sensibilite = res["sensibilite_references"].copy()
+    sensibilite["plage_validee_min_ms"] *= MS_TO_KMH
+    sensibilite["plage_validee_max_ms"] *= MS_TO_KMH
+    L.append(sensibilite.rename(columns={
         "ferme_retiree": "Farm_removed",
         "fermes_apprentissage": "Training_farms",
-        "plage_validee_min_ms": "Validated_min_wind_m_s",
-        "plage_validee_max_ms": "Validated_max_wind_m_s",
+        "plage_validee_min_ms": "Validated_min_wind_kmh",
+        "plage_validee_max_ms": "Validated_max_wind_kmh",
         "heures_site_hors_plage_pct": "Site_hours_outside_range_pct",
         "facteur_calibration_energie_pct": "Energy_calibration_factor_pct",
         "FC_brut_pct": "Gross_CF_pct",
@@ -855,14 +862,14 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
              f"{res['FC_net'] * 100 + sens.min():.1f}–{res['FC_net'] * 100 + sens.max():.1f} % "
              f"(all reference farms: {res['FC_net'] * 100:.1f} %)")
     L.append("\nVALIDATED REFERENCE WIND-SPEED RANGE: "
-             f"{res['vmin_valide']:.2f}–{res['vmax_valide']:.2f} m/s")
+             f"{res['vmin_valide'] * MS_TO_KMH:.2f}–{res['vmax_valide'] * MS_TO_KMH:.2f} km/h")
     L.append(f"Site hours below range: {100 * res['part_heures_sous_plage']:.2f}%; "
              f"above range: {100 * res['part_heures_au_dela']:.2f}%.")
     L.append(f"Share of modelled energy attributed to hours outside the range: "
              f"{res['energie_site_predite_hors_plage_pct']:.2f} %.")
     L.append(f"Sensitivity scenario only: net capacity factor would be "
              f"{100 * res['FC_net_sans_extrapolation_haute']:.1f}% if production were zero "
-             f"above {res['vmax_valide']:.2f} m/s (actual high-wind behavior is unknown).")
+             f"above {res['vmax_valide'] * MS_TO_KMH:.2f} km/h (actual high-wind behavior is unknown).")
     if couverture is not None:
         L.append("\nPRODUCTION DATA COVERAGE (expected hours = hours in the wind file):")
         L.append(couverture.rename(columns={
@@ -892,7 +899,7 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
         L.append("\nWARNINGS:"); L += [f" - {w}" for w in warns]
     L.append("\nASSUMPTIONS AND ESTIMATION ACCURACY:")
     L.append(
-        "- Wind: ERA5 wind speed at 100 m, in m/s. Hourly wind is estimated as "
+        "- Wind: ERA5 wind speed at 100 m is reported in km/h. Hourly wind is estimated as "
         "the mean of the values at both ends of the hour; hours missing either "
         "endpoint are excluded."
     )
@@ -904,11 +911,11 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
     L.append(
         f"- Ramp-up: established operation is detected when the 75th percentile of "
         f"capacity factor is >= {res['seuil_regime']:.2f} at wind speeds of at least "
-        "12 m/s, for at least two consecutive months with at least 10 qualifying "
+        f"{12 * MS_TO_KMH:.1f} km/h, for at least two consecutive months with at least 10 qualifying "
         "hours per month. This threshold is an empirical rule."
     )
     L.append(
-        f"- Power curve: median capacity factor in {EDGES[1] - EDGES[0]:.1f} m/s "
+        f"- Power curve: median capacity factor in {(EDGES[1] - EDGES[0]) * MS_TO_KMH:.1f} km/h "
         f"wind-speed bins, requiring at least {res['min_heures']} hours per bin; "
         "reference-farm values are averaged with weights proportional to hours. "
         "Empty bins are interpolated and values are smoothed with a three-bin "
@@ -933,7 +940,7 @@ def rapport(res, n, mw, warns, couverture=None, couverture_annuelle=None):
     )
     L.append(
         f"- Apparent time availability: share of hours with wind between "
-        f"{res['v_ok']:.1f} and 25 m/s for which capacity factor exceeds "
+        f"{res['v_ok'] * MS_TO_KMH:.1f} and {25 * MS_TO_KMH:.1f} km/h for which capacity factor exceeds "
         f"{100 * res['seuil_arret']:.1f}% of rated capacity. This does not measure "
         "machine availability from outage logs."
     )
@@ -1064,7 +1071,8 @@ def main():
     ap.add_argument("--source-sat", default="eox2016", choices=list(SOURCES), help="source des tuiles satellite (licences : voir en-tête)")
     ap.add_argument("--cache-tuiles", default=".cache_tuiles")
     ap.add_argument("--sans-satellite", action="store_true", help="ne pas télécharger l'image satellite")
-    ap.add_argument("--v-ok", type=float, default=8.0); ap.add_argument("--seuil-arret", type=float, default=0.01)
+    ap.add_argument("--v-ok", type=float, default=8.0, help="seuil de vent en m/s pour la disponibilité apparente (défaut 8)")
+    ap.add_argument("--seuil-arret", type=float, default=0.01)
     ap.add_argument("--min-heures", type=int, default=30); ap.add_argument("--outdir", default="sortie_site")
     ap.add_argument("--cache", default=".cache_vent"); ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
@@ -1099,10 +1107,12 @@ def main():
             warns.append(satellite)
             print(f"  [warning] {satellite}", file=sys.stderr)
     os.makedirs(a.outdir, exist_ok=True)
-    pd.DataFrame({"vent_ms": CENTERS, "P_MW_brut": res["pn"] * res["courbe"], "P_MW_net": res["pn"] * res["courbe"] * res["A_energie"],
+    pd.DataFrame({"vent_kmh": CENTERS * MS_TO_KMH, "P_MW_brut": res["pn"] * res["courbe"], "P_MW_net": res["pn"] * res["courbe"] * res["A_energie"],
                   "P_MW_min_parcs": res["pn"] * res["mn"], "P_MW_max_parcs": res["pn"] * res["mx"], "heures_ref": res["nb"]}
                  ).to_csv(os.path.join(a.outdir, "courbe_puissance.csv"), index=False)
-    res["site"].to_csv(os.path.join(a.outdir, "serie_horaire_site.csv"))
+    serie_sortie = res["site"].rename(columns={"vent_100m_ms": "vent_100m_kmh"}).copy()
+    serie_sortie["vent_100m_kmh"] *= MS_TO_KMH
+    serie_sortie.to_csv(os.path.join(a.outdir, "serie_horaire_site.csv"))
     txt = rapport(res, a.n, a.mw, warns, couverture, couverture_annuelle)
     open(os.path.join(a.outdir, "resume.txt"), "w", encoding="utf-8").write(txt)
     tracer(res, a.n, a.mw, a.lat, a.lon, os.path.join(a.outdir, "courbe_site.png"), satellite)
