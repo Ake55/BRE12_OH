@@ -8,8 +8,8 @@ panel.inert = true;
 function setPanel(open, restoreFocus = false) {
   document.body.classList.toggle("panel-open", open);
   toggle.setAttribute("aria-expanded", String(open));
-  toggle.setAttribute("aria-label", open ? "Close project menu" : "Open project menu");
-  toggleText.textContent = open ? "Close" : "Menu";
+  toggle.setAttribute("aria-label", open ? "Fermer le menu du projet" : "Ouvrir le menu du projet");
+  toggleText.textContent = open ? "Fermer" : "Menu";
   panel.setAttribute("aria-hidden", String(!open));
   overlay.setAttribute("aria-hidden", String(!open));
   panel.inert = !open;

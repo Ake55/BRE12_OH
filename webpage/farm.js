@@ -3,8 +3,8 @@
   const chartElement = document.getElementById("farmChart");
   if (!data || !chartElement) return;
 
-  const numberFormat = new Intl.NumberFormat("en-GB");
-  const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  const numberFormat = new Intl.NumberFormat("fr-FR");
+  const dateFormat = new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -32,22 +32,22 @@
     data.stats.mean_wind_ms === null ? "—" : `${data.stats.mean_wind_ms.toFixed(1)} m/s`;
   byId("metricCapacityFactor").textContent = formatPercent(data.stats.capacity_factor);
   byId("metricCapacityNote").textContent =
-    `${numberFormat.format(data.capacity.total_mw)} MW installed · ` +
+    `${numberFormat.format(data.capacity.total_mw)} MW installés · ` +
     `${data.capacity.turbines} × ${data.capacity.turbine_mw} MW`;
   byId("metricProducingHours").textContent = formatPercent(data.stats.producing_share);
   byId("metricProducingNote").textContent =
-    `${numberFormat.format(data.stats.producing_hours)} of ${numberFormat.format(data.coverage.matched)} matched hours`;
+    `${numberFormat.format(data.stats.producing_hours)} heures sur ${numberFormat.format(data.coverage.matched)} heures appariées`;
 
   if (data.period.start && data.period.end) {
     byId("farmPeriod").textContent = `${dateFormat.format(new Date(data.period.start))} → ${dateFormat.format(
       new Date(data.period.end)
-    )} · ${numberFormat.format(data.stats.records)} hourly records`;
+    )} · ${numberFormat.format(data.stats.records)} relevés horaires`;
   }
 
   byId("coverageNote").textContent =
-    `${numberFormat.format(data.coverage.matched)} hours have both clean production and a matching wind reading. ` +
-    `${numberFormat.format(data.coverage.production_without_wind)} clean production hours have no matching wind. ` +
-    `${numberFormat.format(data.coverage.wind_without_production)} wind hours have no clean production, because they fall outside the period or were rejected by the −10 to 500 MW filter.`;
+    `${numberFormat.format(data.coverage.matched)} heures disposent à la fois d’une production valide et d’une mesure de vent correspondante. ` +
+    `${numberFormat.format(data.coverage.production_without_wind)} heures de production valide n’ont pas de mesure de vent correspondante. ` +
+    `${numberFormat.format(data.coverage.wind_without_production)} heures de vent n’ont pas de production valide, car elles sont hors période ou écartées par le filtre de −10 à 500 MW.`;
 
   const binStep = 0.5;
   const bins = new Map();
@@ -77,49 +77,47 @@
 
   const explainers = {
     real: {
-      kicker: "Real output",
-      title: "Measured production by wind speed",
+      kicker: "Production réelle",
+      title: "Production mesurée selon la vitesse du vent",
       text:
-        "Each dot is one hour with both measured production and a matching wind " +
-        "reading. The orange line averages production within 0.5 m/s wind-speed " +
-        "bins, forming the empirical power curve.",
+        "Chaque point représente une heure pour laquelle on dispose d’une mesure de production et " +
+        "d’une mesure de vent correspondante. La ligne orange représente la production moyenne par " +
+        "tranche de vent de 0,5 m/s et forme la courbe de puissance empirique.",
       legend:
-        '<span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Hourly measurements</span>' +
-        '<span class="explainer-legend__item"><i class="swatch swatch--line"></i>Empirical mean ±1 SD (0.5 m/s bins)</span>',
+        '<span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Mesures horaires</span>' +
+        '<span class="explainer-legend__item"><i class="swatch swatch--line"></i>Moyenne empirique ± 1 écart-type (tranches de 0,5 m/s)</span>',
       note:
-        "The empirical curve reflects real farm behaviour, including wake effects, " +
-        "maintenance and curtailment. Vertical bars show ±1 population standard " +
-        "deviation of hourly production within each bin.",
+        "La courbe empirique reflète le comportement réel du parc, notamment les effets de sillage, " +
+        "la maintenance et les limitations de production. Les barres verticales indiquent ± 1 écart-type " +
+        "de la production horaire dans chaque tranche.",
     },
     theory: {
-      kicker: "Theoretical model",
-      title: "A simplified power curve",
+      kicker: "Modèle théorique",
+      title: "Une courbe de puissance simplifiée",
       text:
-        "The dotted red line is a simplified model, not a fit to the measurements. " +
-        "Output is zero below cut-in, rises with the cube of wind speed to rated " +
-        "speed, stays flat at rated power, then drops to zero after cut-out.",
+        "La ligne rouge pointillée représente un modèle simplifié, qui n’est pas ajusté aux mesures. " +
+        "La production est nulle sous la vitesse de démarrage, augmente avec le cube de la vitesse du vent " +
+        "jusqu’à la vitesse nominale, reste au niveau nominal puis retombe à zéro après la vitesse de coupure.",
       legend:
-        '<span class="explainer-legend__item"><i class="swatch swatch--dash"></i>Theoretical model</span>',
+        '<span class="explainer-legend__item"><i class="swatch swatch--dash"></i>Modèle théorique</span>',
       note:
-        `Model assumptions: cut-in ${defaults.cut_in_ms} m/s, rated speed ` +
-        `${defaults.rated_speed_ms} m/s, cut-out ${defaults.cut_out_ms} m/s and ` +
-        `rated power ${defaults.rated_mw} MW.`,
+        `Hypothèses du modèle : démarrage à ${defaults.cut_in_ms} m/s, vitesse nominale ` +
+        `de ${defaults.rated_speed_ms} m/s, coupure à ${defaults.cut_out_ms} m/s et ` +
+        `puissance nominale de ${defaults.rated_mw} MW.`,
     },
     comparison: {
-      kicker: "Comparison",
-      title: "Model versus reality",
+      kicker: "Comparaison",
+      title: "Modèle et réalité",
       text:
-        "This view overlays the measured hours, the empirical mean and the " +
-        "theoretical model. The gap between the curves shows where real farm " +
-        "output differs from the simplified model.",
+        "Cette vue superpose les mesures horaires, la moyenne empirique et le modèle théorique. " +
+        "L’écart entre les courbes montre en quoi la production réelle du parc diffère du modèle simplifié.",
       legend:
-        '<span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Hourly measurements</span>' +
-        '<span class="explainer-legend__item"><i class="swatch swatch--line"></i>Empirical mean ±1 SD (0.5 m/s bins)</span>' +
-        '<span class="explainer-legend__item"><i class="swatch swatch--dash"></i>Theoretical model</span>',
+        '<span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Mesures horaires</span>' +
+        '<span class="explainer-legend__item"><i class="swatch swatch--line"></i>Moyenne empirique ± 1 écart-type (tranches de 0,5 m/s)</span>' +
+        '<span class="explainer-legend__item"><i class="swatch swatch--dash"></i>Modèle théorique</span>',
       note:
-        "The theoretical curve is not fitted to measurements, so differences from " +
-        "the empirical mean are expected. Vertical bars show ±1 population standard " +
-        "deviation within each wind-speed bin.",
+        "La courbe théorique n’est pas ajustée aux mesures : des écarts avec la moyenne empirique sont donc " +
+        "attendus. Les barres verticales indiquent ± 1 écart-type de la production horaire pour chaque tranche de vent.",
     },
   };
 
@@ -161,17 +159,17 @@
   const scatterTrace = {
     type: "scattergl",
     mode: "markers",
-    name: "Hourly measurements",
+    name: "Mesures horaires",
     x: wind,
     y: power,
     marker: { color: "#0f6f78", size: 3, opacity: 0.3 },
-    hovertemplate: "Wind %{x:.2f} m/s<br>Power %{y:.0f} MW<extra></extra>",
+    hovertemplate: "Vent : %{x:.2f} m/s<br>Puissance : %{y:.0f} MW<extra></extra>",
   };
 
   const empiricalTrace = {
     type: "scatter",
     mode: "lines",
-    name: "Empirical mean ±1 SD (0.5 m/s bins)",
+    name: "Moyenne empirique ± 1 écart-type (tranches de 0,5 m/s)",
     x: empirical.map((bin) => bin.center),
     y: empirical.map((bin) => bin.mean),
     line: { color: "#c98a1f", width: 3 },
@@ -185,7 +183,7 @@
     },
     customdata: empirical.map((bin) => [bin.count, bin.stdDev]),
     hovertemplate:
-      "Wind %{x:.2f} m/s<br>Mean %{y:.1f} MW<br>± %{customdata[1]:.1f} MW SD<br>%{customdata[0]} hours<extra></extra>",
+      "Vent : %{x:.2f} m/s<br>Moyenne : %{y:.1f} MW<br>± %{customdata[1]:.1f} MW (écart-type)<br>%{customdata[0]} heures<extra></extra>",
   };
 
   let currentMode = "real";
@@ -195,11 +193,11 @@
     const theoryTrace = {
       type: "scatter",
       mode: "lines",
-      name: "Theoretical model",
+      name: "Modèle théorique",
       x: curve.x,
       y: curve.y,
       line: { color: "#d45b45", width: 2.5, dash: "dot" },
-      hovertemplate: "Wind %{x:.1f} m/s<br>Model %{y:.1f} MW<extra></extra>",
+      hovertemplate: "Vent : %{x:.1f} m/s<br>Modèle : %{y:.1f} MW<extra></extra>",
     };
 
     if (currentMode === "theory") return [theoryTrace];
@@ -227,7 +225,7 @@
         font: { size: 11, color: "#5d7279" },
       },
       xaxis: {
-        title: { text: "Wind speed (m/s, source km/h ÷ 3.6)", font: { size: 12 } },
+        title: { text: "Vitesse du vent (m/s, source en km/h ÷ 3,6)", font: { size: 12 } },
         range: [0, maxSpeed],
         gridcolor: "rgba(8, 37, 47, 0.08)",
         zeroline: false,
@@ -250,7 +248,7 @@
   function draw() {
     if (!window.Plotly) {
       chartElement.innerHTML =
-        '<p class="chart-fallback">The chart library could not be loaded. Check your internet connection and reload the page.</p>';
+        '<p class="chart-fallback">La bibliothèque graphique n’a pas pu être chargée. Vérifiez votre connexion Internet puis rechargez la page.</p>';
       return;
     }
     window.Plotly.react(chartElement, visibleTraces(), layout(), config);
@@ -272,7 +270,7 @@
   });
 
   byId("downloadCurve").addEventListener("click", () => {
-    const rows = ["wind_bin_center_ms,mean_power_mw,std_dev_mw,hours"];
+    const rows = ["centre_tranche_vent_ms,puissance_moyenne_mw,ecart_type_mw,heures"];
     empirical.forEach((bin) => {
       rows.push(
         `${bin.center.toFixed(2)},${bin.mean.toFixed(3)},${bin.stdDev.toFixed(3)},${bin.count}`
@@ -290,15 +288,15 @@
   });
 
   const hourLabels = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, "0")}:00`);
-  const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const monthlyLabels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const monthLabels = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  const monthlyLabels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
   const hourlyChart = byId("hourlyChart");
   const monthlyChart = byId("monthlyChart");
   const profileYear = byId("profileYear");
 
   function showChartFallback(element) {
     element.innerHTML =
-      '<p class="chart-fallback">The chart library could not be loaded. Check your internet connection and reload the page.</p>';
+      '<p class="chart-fallback">La bibliothèque graphique n’a pas pu être chargée. Vérifiez votre connexion Internet puis rechargez la page.</p>';
   }
 
   function profileLayout(labels, isHourly) {
@@ -321,7 +319,7 @@
         categoryarray: labels,
         gridcolor: "rgba(8, 37, 47, 0.06)",
         tickfont: { size: 10 },
-        title: { text: isHourly ? "Hour of day" : "Month", font: { size: 11 } },
+        title: { text: isHourly ? "Heure de la journée" : "Mois", font: { size: 11 } },
       },
       yaxis: {
         title: { text: "Production (MW)", font: { size: 11 } },
@@ -329,7 +327,7 @@
         zeroline: false,
       },
       yaxis2: {
-        title: { text: "Wind (m/s)", font: { size: 11 } },
+        title: { text: "Vent (m/s)", font: { size: 11 } },
         overlaying: "y",
         side: "right",
         showgrid: false,
@@ -350,12 +348,12 @@
         marker: { color: "#0f6f78", size: 5 },
         customdata: profile.production_hours,
         connectgaps: false,
-        hovertemplate: "%{x}<br>Average production %{y:.1f} MW<br>%{customdata} hours<extra></extra>",
+        hovertemplate: "%{x}<br>Production moyenne : %{y:.1f} MW<br>%{customdata} heures<extra></extra>",
       },
       {
         type: "scatter",
         mode: "lines+markers",
-        name: "Wind speed (m/s)",
+        name: "Vitesse du vent (m/s)",
         x: labels,
         y: profile.wind,
         yaxis: "y2",
@@ -363,7 +361,7 @@
         marker: { color: "#d45b45", size: 5 },
         customdata: profile.wind_hours,
         connectgaps: false,
-        hovertemplate: "%{x}<br>Average wind %{y:.2f} m/s<br>%{customdata} hours<extra></extra>",
+        hovertemplate: "%{x}<br>Vent moyen : %{y:.2f} m/s<br>%{customdata} heures<extra></extra>",
       },
     ];
   }
@@ -409,9 +407,9 @@
     const windHours = monthly.wind_hours.reduce((total, count) => total + count, 0);
     const coverage = coverageForMonths(monthly);
     byId("profileNote").textContent =
-      `${year}${coverage ? ` coverage: ${coverage}` : ""} · ` +
-      `${numberFormat.format(productionHours)} production hours and ` +
-      `${numberFormat.format(windHours)} wind hours used. Missing hours are not treated as zero.`;
+      `${year}${coverage ? ` · période couverte : ${coverage}` : ""} · ` +
+      `${numberFormat.format(productionHours)} heures de production et ` +
+      `${numberFormat.format(windHours)} heures de vent utilisées. Les heures manquantes ne sont pas assimilées à zéro.`;
   }
 
   function yearOptionLabel(year) {

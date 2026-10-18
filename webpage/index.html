@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="OceanMarathon — an open, reproducible look at the real performance of French offshore wind farms.">
-  <title>OceanMarathon — The real output of French offshore wind</title>
+    content="OceanMarathon — une exploration ouverte et reproductible des performances réelles des parcs éoliens en mer français.">
+  <title>OceanMarathon — La production réelle de l’éolien en mer français</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <a class="site-brand" href="index.html" aria-label="Accueil OceanMarathon">
+    <img src="Images/mais%20combien%20produit%20un%20parc%20e%CC%81olien%20en%20mer%20.png" alt="Logo ÉOLIMPIDE">
+  </a>
   <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"
-    aria-label="Open project menu">
+    aria-label="Ouvrir le menu du projet">
     <span class="panel-toggle__icon" aria-hidden="true">
       <span></span>
       <span></span>
@@ -23,56 +26,56 @@
 
   <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
 
-  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+  <aside class="side-panel" id="sidePanel" aria-label="Menu du projet" aria-hidden="true">
     <div class="side-panel__inner">
       <p class="eyebrow">BRET12 · CEREMA</p>
       <h2 class="side-panel__title">OceanMarathon</h2>
-      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+      <p class="side-panel__lead">Passer des hypothèses sur l’éolien en mer à des mesures réelles.</p>
 
-      <nav class="side-nav" aria-label="On this page">
-        <a href="#overview">Overview</a>
-        <a href="all4windfarms.html">All four wind farms</a>
-        <a href="consumption.html">Commune coverage</a>
-        <a href="new-wind-farm.html">New wind farm</a>
+      <nav class="side-nav" aria-label="Navigation sur cette page">
+        <a href="#overview">Accueil</a>
+        <a href="all4windfarms.html">Les quatre parcs</a>
+        <a href="consumption.html">Couverture des communes</a>
+        <a href="new-wind-farm.html">Nouveau parc éolien</a>
         <!-- <a href="saint-nazaire.html">Saint-Nazaire</a>
         <a href="saint-brieuc.html">Saint-Brieuc</a>
         <a href="fecamp.html">Fécamp</a>
         <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a> -->
-        <a href="#story">The story</a>
-        <a href="#approach">Our approach</a>
-        <a href="#challenge">The 48-hour challenge</a>
-        <a href="#data">Source data</a>
+        <a href="#story">Le constat</a>
+        <a href="#approach">Notre démarche</a>
+        <a href="#challenge">Le défi de 48 heures</a>
+        <a href="#data">Données sources</a>
       </nav>
 
       <div class="side-panel__facts">
-        <h3>Project facts</h3>
+        <h3>Le projet en bref</h3>
         <dl>
           <div>
             <dt>Organisation</dt>
             <dd>CEREMA</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>Lieu</dt>
             <dd>Brest, France</dd>
           </div>
           <div>
-            <dt>Challenge owner</dt>
+            <dt>Responsable du défi</dt>
             <dd>Matthieu Suire</dd>
           </div>
           <div>
-            <dt>Focus</dt>
-            <dd>Climate, energy and spatial planning</dd>
+            <dt>Thématiques</dt>
+            <dd>Climat, énergie et aménagement du territoire</dd>
           </div>
           <div>
-            <dt>Dataset</dt>
-            <dd>30,701 hourly readings across four French offshore farms, 2023–2026</dd>
+            <dt>Jeu de données</dt>
+            <dd>30 701 relevés horaires pour quatre parcs éoliens en mer français, de 2023 à 2026</dd>
           </div>
         </dl>
       </div>
 
       <div class="side-panel__footer">
-        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo:
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visiter le CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo :
           Nicholas Doherty</a>
       </div>
     </div>
@@ -83,41 +86,41 @@
       <div class="hero__media" aria-hidden="true"></div>
       <div class="hero__content reveal">
         <p class="eyebrow eyebrow--light">BRET12 · CEREMA · Brest</p>
-        <h1>What do French offshore wind farms <em>really</em> produce?</h1>
+        <h1>Que produisent <em>réellement</em> les parcs éoliens en mer français ?</h1>
         <p class="hero__lead">
-          As we electrify transport, industry and heating, we will need far more clean electricity.
-          Offshore wind is one of France's strongest cards — powerful, steady sea winds and the
-          world's second-largest maritime area. Making the most of it starts with knowing what
-          these farms actually generate.
+          Avec l’électrification des transports, de l’industrie et du chauffage, nos besoins en
+          électricité décarbonée vont fortement augmenter. L’éolien en mer est un atout majeur
+          pour la France : des vents puissants et réguliers, et le deuxième domaine maritime
+          mondial. Pour en tirer le meilleur parti, il faut mesurer ce que ces parcs produisent vraiment.
         </p>
         <div class="hero__actions">
-          <a class="button button--primary" href="#story">Read the story</a>
-          <a class="button button--ghost" href="#challenge">Explore the brief</a>
+          <a class="button button--primary" href="#story">Découvrir le constat</a>
+          <a class="button button--ghost" href="#challenge">Voir le défi</a>
         </div>
       </div>
       <div class="hero__scroll" aria-hidden="true">
         <span></span>
-        Scroll to explore
+        Faites défiler pour découvrir
       </div>
     </section>
 
-    <section class="stats" aria-label="Project at a glance">
+    <section class="stats" aria-label="Le projet en un coup d’œil">
       <div class="container stats__grid">
         <div class="stat reveal">
           <strong>4</strong>
-          <span>offshore wind farms</span>
+          <span>parcs éoliens en mer</span>
         </div>
         <div class="stat reveal">
           <strong>30,701</strong>
-          <span>hours of real production data</span>
+          <span>heures de données de production réelle</span>
         </div>
         <div class="stat reveal">
           <strong>2023–2026</strong>
-          <span>measured, hour by hour</span>
+          <span>mesurées heure par heure</span>
         </div>
         <div class="stat reveal">
-          <strong>Measured</strong>
-          <span>not assumed</span>
+          <strong>Mesuré</strong>
+          <span>pas supposé</span>
         </div>
       </div>
     </section>
@@ -125,58 +128,58 @@
     <section class="section story" id="story">
       <div class="container story__grid">
         <div class="story__intro reveal">
-          <p class="eyebrow">The story</p>
-          <h2>The gap between theory and reality</h2>
+          <p class="eyebrow">Le constat</p>
+          <h2>Entre théorie et réalité</h2>
         </div>
         <div class="story__copy reveal">
           <p class="story__lead">
-            Today we rely on theoretical power curves — built from models and wind-tunnel tests
-            on a single isolated turbine.
+            Aujourd’hui, nous nous appuyons sur des courbes de puissance théoriques, établies à
+            partir de modèles et d’essais en soufflerie sur une éolienne isolée.
           </p>
           <p>
-            A real farm at sea behaves very differently. It is shaped by wake effects between
-            turbines, wind direction, maintenance and more. Yet that gap between theory and
-            reality is barely documented, while we plan and subsidise a multi-billion-euro
-            industry on it.
+            En mer, un parc se comporte tout autrement : effets de sillage entre les éoliennes,
+            direction du vent, maintenance et bien d’autres facteurs entrent en jeu. Pourtant,
+            l’écart entre théorie et réalité reste peu documenté, alors que cette industrie
+            représente des investissements de plusieurs milliards d’euros.
           </p>
           <p>
-            For the first time, years of real hourly production from France's offshore farms are
-            openly available. By crossing them with open wind data, we can reconstruct what these
-            farms truly produce — and understand why reality drifts from the model.
+            Pour la première fois, plusieurs années de production horaire réelle des parcs français
+            sont accessibles. En les croisant avec des données de vent ouvertes, nous pouvons
+            reconstituer leur production réelle et comprendre pourquoi elle diffère des modèles.
           </p>
           <blockquote>
-            The goal is an open, reproducible look at offshore wind performance: turning
-            <strong>“we assume”</strong> into <strong>“we measured.”</strong>
+            L’objectif : analyser ouvertement et de façon reproductible les performances de l’éolien
+            en mer, et remplacer <strong>« nous supposons »</strong> par <strong>« nous avons mesuré ».</strong>
           </blockquote>
         </div>
       </div>
     </section>
 
-    <section class="section cards-section" aria-label="Why this matters">
+    <section class="section cards-section" aria-label="Pourquoi c’est important">
       <div class="container">
         <div class="card-grid">
           <article class="card reveal">
             <span class="card__number">01</span>
-            <h3>The blind spot</h3>
+            <h3>L’angle mort</h3>
             <p>
-              Power curves come from models and wind-tunnel tests on one isolated turbine.
-              They do not capture how a full farm behaves in the open sea.
+              Les courbes de puissance reposent sur des modèles et des essais en soufflerie
+              réalisés sur une seule éolienne. Elles ne décrivent pas le comportement d’un parc entier en mer.
             </p>
           </article>
           <article class="card reveal">
             <span class="card__number">02</span>
-            <h3>The reality</h3>
+            <h3>La réalité</h3>
             <p>
-              Wakes, wind direction, maintenance and operations all shape output. The difference
-              between forecast and reality is real, and it compounds at farm scale.
+              Les sillages, la direction du vent, la maintenance et l’exploitation influencent la
+              production. L’écart entre prévision et réalité existe et s’amplifie à l’échelle d’un parc.
             </p>
           </article>
           <article class="card reveal">
             <span class="card__number">03</span>
-            <h3>The mission</h3>
+            <h3>La mission</h3>
             <p>
-              Combine open hourly production with open wind data to reconstruct real power curves
-              and make offshore wind planning more honest.
+              Croiser les données horaires ouvertes de production et de vent pour reconstituer les
+              courbes réelles et mieux éclairer la planification de l’éolien en mer.
             </p>
           </article>
         </div>
@@ -186,40 +189,40 @@
     <section class="section approach" id="approach">
       <div class="container">
         <div class="section-heading reveal">
-          <p class="eyebrow">Our approach</p>
-          <h2>From assumption to measurement</h2>
+          <p class="eyebrow">Notre démarche</p>
+          <h2>De l’hypothèse à la mesure</h2>
           <p>
-            An open, reproducible workflow that moves from raw production records to a clearer
-            picture of how French offshore wind farms really perform.
+            Une démarche ouverte et reproductible, des relevés bruts à une compréhension plus
+            précise des performances réelles des parcs français.
           </p>
         </div>
         <ol class="steps">
           <li class="step reveal">
             <span class="step__index">01</span>
             <div>
-              <h3>Open the data</h3>
-              <p>Start with years of real hourly production from France's offshore farms.</p>
+              <h3>Ouvrir les données</h3>
+              <p>Partir de plusieurs années de production horaire réelle des parcs français.</p>
             </div>
           </li>
           <li class="step reveal">
             <span class="step__index">02</span>
             <div>
-              <h3>Cross-reference</h3>
-              <p>Pair production records with open wind data for the same places and hours.</p>
+              <h3>Croiser les données</h3>
+              <p>Associer production et données de vent ouvertes, aux mêmes lieux et aux mêmes heures.</p>
             </div>
           </li>
           <li class="step reveal">
             <span class="step__index">03</span>
             <div>
-              <h3>Reconstruct</h3>
-              <p>Build the real power curve for each farm instead of relying on theory alone.</p>
+              <h3>Reconstituer</h3>
+              <p>Établir la courbe de puissance réelle de chaque parc, sans s’appuyer uniquement sur la théorie.</p>
             </div>
           </li>
           <li class="step reveal">
             <span class="step__index">04</span>
             <div>
-              <h3>Explain the gap</h3>
-              <p>Examine wake effects, direction and cross-farm smoothing to understand the drift.</p>
+              <h3>Expliquer les écarts</h3>
+              <p>Étudier les sillages, la direction du vent et le lissage entre parcs.</p>
             </div>
           </li>
         </ol>
@@ -229,49 +232,48 @@
     <section class="section challenge" id="challenge">
       <div class="container challenge__grid">
         <div class="challenge__intro reveal">
-          <p class="eyebrow eyebrow--light">The 48-hour challenge</p>
-          <h2>What we are building</h2>
+          <p class="eyebrow eyebrow--light">Le défi de 48 heures</p>
+          <h2>Ce que nous développons</h2>
           <p>
-            An interactive dashboard that plots production against wind, reconstructs the real
-            power curve for each French offshore wind farm, and adds complementary analyses as
-            time allows.
+            Un tableau de bord interactif qui met en relation production et vent, reconstitue la
+            courbe réelle de chaque parc français et ajoute des analyses complémentaires.
           </p>
-          <span class="badge">48 hours · open · reproducible</span>
+          <span class="badge">48 heures · ouvert · reproductible</span>
         </div>
         <ul class="challenge__list reveal">
           <li>
             <span>01</span>
             <div>
-              <h3>Production vs wind</h3>
-              <p>Interactive scatter plots for every farm.</p>
+              <h3>Production et vent</h3>
+              <p>Nuages de points interactifs pour chaque parc.</p>
             </div>
           </li>
           <li>
             <span>02</span>
             <div>
-              <h3>Reconstructed power curves</h3>
-              <p>Real behaviour, built from measured hourly output.</p>
+              <h3>Courbes de puissance reconstituées</h3>
+              <p>Le comportement réel, à partir des mesures horaires.</p>
             </div>
           </li>
           <li>
             <span>03</span>
             <div>
-              <h3>Wake effects by direction</h3>
-              <p>See how wind direction changes what a farm produces.</p>
+              <h3>Sillages selon la direction</h3>
+              <p>Observer comment la direction du vent modifie la production d’un parc.</p>
             </div>
           </li>
           <li>
             <span>04</span>
             <div>
-              <h3>Theory vs reality</h3>
-              <p>Compare measured curves with theoretical expectations.</p>
+              <h3>Théorie et réalité</h3>
+              <p>Comparer les courbes mesurées aux prévisions théoriques.</p>
             </div>
           </li>
           <li>
             <span>05</span>
             <div>
-              <h3>Cross-farm smoothing</h3>
-              <p>Explore how geography and scale shape aggregate output.</p>
+              <h3>Lissage entre parcs</h3>
+              <p>Étudier l’influence de la géographie et de l’échelle sur la production agrégée.</p>
             </div>
           </li>
         </ul>
@@ -281,30 +283,30 @@
     <section class="section data" id="data">
       <div class="container data__grid">
         <div class="reveal">
-          <p class="eyebrow">Source data</p>
-          <h2>Built on open, hourly records</h2>
+          <p class="eyebrow">Données sources</p>
+          <h2>Des relevés horaires ouverts</h2>
           <p>
-            The project uses hourly production data from four French offshore wind farms:
-            Saint-Nazaire, Saint-Brieuc, Fécamp and Yeu-Noirmoutier. The dataset spans
-            3 March 2023 to 1 October 2026.
+            Le projet s’appuie sur les données horaires de production de quatre parcs éoliens en
+            mer français : Saint-Nazaire, Saint-Brieuc, Fécamp et Yeu-Noirmoutier. Elles couvrent
+            la période du 3 mars 2023 au 1er octobre 2026.
           </p>
         </div>
         <div class="data__panel reveal">
           <div>
-            <span class="data__label">Coverage</span>
-            <strong>2023 to 2026</strong>
+            <span class="data__label">Période</span>
+            <strong>2023 à 2026</strong>
           </div>
           <div>
-            <span class="data__label">Resolution</span>
-            <strong>Hourly</strong>
+            <span class="data__label">Fréquence</span>
+            <strong>Horaire</strong>
           </div>
           <div>
-            <span class="data__label">Farms</span>
+            <span class="data__label">Parcs</span>
             <strong>Saint-Nazaire · Saint-Brieuc · Fécamp · Yeu-Noirmoutier</strong>
           </div>
           <div>
-            <span class="data__label">Access</span>
-            <strong>Open and reproducible</strong>
+            <span class="data__label">Accès</span>
+            <strong>Ouvert et reproductible</strong>
           </div>
         </div>
       </div>
@@ -315,12 +317,11 @@
     <div class="container footer__inner">
       <div>
         <p class="footer__brand">OceanMarathon</p>
-        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+        <p>Réalisé pour le défi BRET12 avec le CEREMA, à Brest.</p>
       </div>
       <div class="footer__links">
         <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo
-          credit</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Crédit photo</a>
       </div>
     </div>
   </footer>

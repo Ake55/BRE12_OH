@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="A closer look at France's four offshore wind farms: Saint-Nazaire, Saint-Brieuc, Fécamp and Yeu-Noirmoutier.">
-  <title>All four wind farms — OceanMarathon</title>
+    content="Découvrez les quatre parcs éoliens en mer français : Saint-Nazaire, Saint-Brieuc, Fécamp et Yeu-Noirmoutier.">
+  <title>Les quatre parcs éoliens — OceanMarathon</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <a class="site-brand" href="index.html" aria-label="Accueil OceanMarathon">
+    <img src="Images/mais%20combien%20produit%20un%20parc%20e%CC%81olien%20en%20mer%20.png" alt="Logo ÉOLIMPIDE">
+  </a>
   <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"
-    aria-label="Open project menu">
+    aria-label="Ouvrir le menu du projet">
     <span class="panel-toggle__icon" aria-hidden="true">
       <span></span>
       <span></span>
@@ -23,56 +26,56 @@
 
   <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
 
-  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+  <aside class="side-panel" id="sidePanel" aria-label="Menu du projet" aria-hidden="true">
     <div class="side-panel__inner">
       <p class="eyebrow">BRET12 · CEREMA</p>
       <h2 class="side-panel__title">OceanMarathon</h2>
-      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+      <p class="side-panel__lead">Passer des hypothèses sur l’éolien en mer à des mesures réelles.</p>
 
-      <nav class="side-nav" aria-label="Site navigation">
-        <a href="index.html">Overview</a>
-        <a href="all4windfarms.html" aria-current="page">All four wind farms</a>
-        <a href="consumption.html">Commune coverage</a>
-        <a href="new-wind-farm.html">New wind farm</a>
+      <nav class="side-nav" aria-label="Navigation du site">
+        <a href="index.html">Accueil</a>
+        <a href="all4windfarms.html" aria-current="page">Les quatre parcs</a>
+        <a href="consumption.html">Couverture des communes</a>
+        <a href="new-wind-farm.html">Nouveau parc éolien</a>
         <!-- <a href="saint-nazaire.html">Saint-Nazaire</a>
         <a href="saint-brieuc.html">Saint-Brieuc</a>
         <a href="fecamp.html">Fécamp</a>
         <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a> -->
-        <a href="index.html#story">The story</a>
-        <a href="index.html#approach">Our approach</a>
-        <a href="index.html#challenge">The 48-hour challenge</a>
-        <a href="index.html#data">Source data</a>
+        <a href="index.html#story">Le constat</a>
+        <a href="index.html#approach">Notre démarche</a>
+        <a href="index.html#challenge">Le défi de 48 heures</a>
+        <a href="index.html#data">Données sources</a>
       </nav>
 
       <div class="side-panel__facts">
-        <h3>Project facts</h3>
+        <h3>Le projet en bref</h3>
         <dl>
           <div>
             <dt>Organisation</dt>
             <dd>CEREMA</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>Lieu</dt>
             <dd>Brest, France</dd>
           </div>
           <div>
-            <dt>Challenge owner</dt>
+            <dt>Responsable du défi</dt>
             <dd>Matthieu Suire</dd>
           </div>
           <div>
-            <dt>Focus</dt>
-            <dd>Climate, energy and spatial planning</dd>
+            <dt>Thématiques</dt>
+            <dd>Climat, énergie et aménagement du territoire</dd>
           </div>
           <div>
-            <dt>Dataset</dt>
-            <dd>30,701 hourly readings across four French offshore farms, 2023-2026</dd>
+            <dt>Jeu de données</dt>
+            <dd>30 701 relevés horaires pour quatre parcs éoliens en mer français, de 2023 à 2026</dd>
           </div>
         </dl>
       </div>
 
       <div class="side-panel__footer">
-        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo:
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visiter le CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo :
           Nicholas Doherty</a>
       </div>
     </div>
@@ -81,12 +84,12 @@
   <main>
     <section class="subpage-head">
       <div class="container">
-        <a class="back-link" href="index.html">Back to overview</a>
+        <a class="back-link" href="index.html">Retour à l’accueil</a>
         <p class="eyebrow eyebrow--light">BRET12 · CEREMA · Brest</p>
-        <h1>All four wind farms</h1>
+        <h1>Les quatre parcs éoliens en mer</h1>
         <p>
-          France's offshore wind production, measured hour by hour across four farms.
-          Explore each site and the data behind its real output.
+          La production éolienne en mer française, mesurée heure par heure sur quatre parcs.
+          Découvrez chaque site et les données qui décrivent sa production réelle.
         </p>
       </div>
     </section>
@@ -98,45 +101,44 @@
             <span class="farm-card__tag">Loire-Atlantique</span>
             <h2>Saint-Nazaire</h2>
             <p>
-              France's first commercial-scale offshore wind farm, located off the
-              Loire-Atlantique coast.
+              Premier parc éolien en mer français à l’échelle commerciale, au large de la
+              Loire-Atlantique.
             </p>
-            <span class="farm-card__meta">2 turbine groups · hourly production</span>
+            <span class="farm-card__meta">2 groupes de turbines · production horaire</span>
           </a>
 
           <a class="farm-card reveal" href="saint-brieuc.html">
             <span class="farm-card__tag">Brittany</span>
             <h2>Saint-Brieuc</h2>
             <p>
-              Situated in the Bay of Saint-Brieuc, this farm brings offshore wind
-              production to the Brittany coast.
+              Situé dans la baie de Saint-Brieuc, ce parc produit de l’électricité au large
+              des côtes bretonnes.
             </p>
-            <span class="farm-card__meta">2 turbine groups · hourly production</span>
+            <span class="farm-card__meta">2 groupes de turbines · production horaire</span>
           </a>
 
           <a class="farm-card reveal" href="fecamp.html">
             <span class="farm-card__tag">Normandy</span>
             <h2>Fécamp</h2>
             <p>
-              A Normandy offshore wind farm whose output is shaped by the strong
-              winds of the English Channel.
+              Ce parc normand est soumis aux vents soutenus de la Manche.
             </p>
-            <span class="farm-card__meta">2 turbine groups · hourly production</span>
+            <span class="farm-card__meta">2 groupes de turbines · production horaire</span>
           </a>
 
           <a class="farm-card reveal" href="yeu-noirmoutier.html">
             <span class="farm-card__tag">Vendée</span>
             <h2>Yeu-Noirmoutier</h2>
             <p>
-              Located off the coasts of Île d'Yeu and Noirmoutier, adding Atlantic
-              production to the French fleet.
+              Situé au large de l’île d’Yeu et de Noirmoutier, il contribue à la production
+              éolienne française dans l’Atlantique.
             </p>
-            <span class="farm-card__meta">2 turbine groups · hourly production</span>
+            <span class="farm-card__meta">2 groupes de turbines · production horaire</span>
           </a>
         </div>
 
         <p class="page-note reveal">
-          Farm-level charts and production analysis will be added here next.
+          Les graphiques et analyses de production par parc seront ajoutés ici.
         </p>
       </div>
     </section>
@@ -146,12 +148,11 @@
     <div class="container footer__inner">
       <div>
         <p class="footer__brand">OceanMarathon</p>
-        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+        <p>Réalisé pour le défi BRET12 avec le CEREMA, à Brest.</p>
       </div>
       <div class="footer__links">
         <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo
-          credit</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank"         rel="noreferrer">Crédit photo</a>
       </div>
     </div>
   </footer>

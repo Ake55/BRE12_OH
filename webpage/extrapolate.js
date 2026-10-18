@@ -5,31 +5,31 @@
   const statusElement = document.getElementById("formStatus");
 
   if (!reference || !form || !resultsSection) {
-    if (statusElement) statusElement.textContent = "Reference data could not be loaded.";
+    if (statusElement) statusElement.textContent = "Impossible de charger les données de référence.";
     return;
   }
 
   const HOUR_MS = 3_600_000;
   const MS_TO_KMH = 3.6;
   const CENTERS = Array.from({ length: 60 }, (_, index) => index * 0.5 + 0.25);
-  const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const MONTH_LABELS = ["Janv.", "Févr.", "Mars", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."];
   const SATELLITE_SOURCES = {
     eox2016: {
       url: "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg",
       maxNativeZoom: 14,
       attribution:
-        "Sentinel-2 cloudless - s2maps.eu by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016) - CC BY 4.0",
+        "Sentinel-2 sans nuages - s2maps.eu par EOX IT Services GmbH (contient des données Copernicus Sentinel 2016 modifiées) - CC BY 4.0",
     },
     eox2024: {
       url: "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg",
       maxNativeZoom: 14,
       attribution:
-        "Sentinel-2 cloudless - s2maps.eu by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024) - CC BY-NC-SA 4.0",
+        "Sentinel-2 sans nuages - s2maps.eu par EOX IT Services GmbH (contient des données Copernicus Sentinel 2024 modifiées) - CC BY-NC-SA 4.0",
     },
     esri: {
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       maxNativeZoom: 17,
-      attribution: "Tiles (c) Esri - Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+      attribution: "Tuiles © Esri - Sources : Esri, Maxar, Earthstar Geographics et la communauté des utilisateurs SIG",
     },
   };
   const DEFAULTS = {
@@ -144,7 +144,7 @@
       scores.set(lag, correlations.length ? mean(correlations) : NaN);
     }
     const valid = [...scores].filter(([, score]) => Number.isFinite(score));
-    if (!valid.length) throw new Error("Could not determine a production/wind time shift.");
+    if (!valid.length) throw new Error("Impossible de déterminer le décalage temporel entre la production et le vent.");
     valid.sort((first, second) => second[1] - first[1]);
     return { lag: valid[0][0], scores };
   }
@@ -206,7 +206,7 @@
     const valid = combined
       .map((value, index) => (Number.isFinite(value) ? index : -1))
       .filter((index) => index >= 0);
-    if (valid.length < 5) throw new Error("Too few populated wind bins to build a curve.");
+    if (valid.length < 5) throw new Error("Trop peu de tranches de vent renseignées pour construire une courbe.");
     const first = valid[0];
     const last = valid.at(-1);
     const full = CENTERS.map((_, index) => {
@@ -257,7 +257,7 @@
         predicted += predict(item.v, curve);
       }
     }
-    if (predicted <= 0) throw new Error("Cannot calculate the energy calibration factor.");
+    if (predicted <= 0) throw new Error("Impossible de calculer le facteur de calibration énergétique.");
     return observed / predicted;
   }
 
@@ -275,13 +275,13 @@
       if (selected.length) data.set(farm.name, selected);
       windows.push({
         farm: farm.name,
-        start: start === null ? "never reached" : new Date(start).toISOString().slice(0, 10),
+        start: start === null ? "jamais atteint" : new Date(start).toISOString().slice(0, 10),
         used: selected.length,
         total: pairs.length,
       });
     }
     if (data.size < 2) {
-      throw new Error("Fewer than two farms have an established-operation period; lower the threshold.");
+      throw new Error("Moins de deux parcs ont atteint un régime établi ; abaissez le seuil.");
     }
     const base = combineCurves([...data.values()].map((items) => curveForFarm(items, options.minHours)));
     const energyCalibration = calibrate(data, base.curve);
@@ -316,7 +316,7 @@
           net: Math.min(gross * energyCalibration, rated),
         };
       });
-    if (!site.length) throw new Error("No site wind data available for the selected dates.");
+    if (!site.length) throw new Error("Aucune donnée de vent n’est disponible pour le site aux dates sélectionnées.");
     const grossCf = mean(site.map((item) => item.gross / rated));
     const netCf = mean(site.map((item) => item.net / rated));
 
@@ -407,7 +407,7 @@
         .slice(0, 3)
         .map(
           (period) =>
-            `${formatDateTime(period.start)}–${formatDateTime(period.end)} (${period.hours} hours)`
+            `${formatDateTime(period.start)}–${formatDateTime(period.end)} (${period.hours} heures)`
         );
       return {
         farm: farm.name,
@@ -417,7 +417,7 @@
         coveragePct: wind.size ? (100 * (wind.size - missing.length)) / wind.size : NaN,
         missingPeriods: periods.length,
         longestGap: Math.max(0, ...periods.map((period) => period.hours)),
-        gaps: gaps.join("; ") || "none",
+        gaps: gaps.join("; ") || "aucune",
         byYear: [...byYear]
           .sort((first, second) => first[0] - second[0])
           .map(([year, entry]) => ({
@@ -470,48 +470,48 @@
     const high = Math.max(...farms.map((farm) => farm.turbine_mw));
     if (options.turbineMw < 0.75 * low || options.turbineMw > 1.25 * high) {
       warnings.push(
-        `Unit rated power ${options.turbineMw} MW is outside the reference range (${low}–${high} MW); treat the result as an order-of-magnitude estimate.`
+        `La puissance nominale unitaire de ${options.turbineMw} MW est hors de la plage de référence (${low}–${high} MW) ; considérez le résultat comme un ordre de grandeur.`
       );
     }
     if (result.abovePct > 1) {
       warnings.push(
-        `${result.abovePct.toFixed(1)}% of site hours exceed the validated wind range up to ${(
+        `${result.abovePct.toFixed(1)} % des heures du site dépassent la plage de vent validée, jusqu’à ${(
           result.vmax * MS_TO_KMH
-        ).toFixed(1)} km/h; a plateau is assumed.`
+        ).toFixed(1)} km/h ; un plateau est supposé.`
       );
     }
     if (result.belowPct > 1) {
       warnings.push(
-        `${result.belowPct.toFixed(1)}% of site hours are below the validated range starting at ${(
+        `${result.belowPct.toFixed(1)} % des heures du site sont inférieures à la plage validée, qui commence à ${(
           result.vmin * MS_TO_KMH
         ).toFixed(1)} km/h.`
       );
     }
     if (result.energyCalibration > 1) {
       warnings.push(
-        `The energy calibration factor is ${(100 * result.energyCalibration).toFixed(
+        `Le facteur de calibration énergétique est de ${(100 * result.energyCalibration).toFixed(
           1
-        )}%; it is not a technical availability measure.`
+        )} % ; il ne s’agit pas d’une mesure de disponibilité technique.`
       );
     }
     const maxBias = Math.max(...result.validation.map((item) => Math.abs(item.biasPoints)));
     if (maxBias > 3) {
       warnings.push(
-        `Leave-one-farm-out capacity-factor bias reaches ${maxBias.toFixed(1)} percentage points.`
+        `Le biais du facteur de charge atteint ${maxBias.toFixed(1)} points lorsque l’on retire un parc de référence.`
       );
     }
     for (const window of result.windows) {
       const share = window.total ? (100 * window.used) / window.total : 0;
       if (share < 80) {
         warnings.push(
-          `${window.farm}: established operation starts ${window.start}; ${share.toFixed(
+          `${window.farm} : le régime établi commence le ${window.start} ; ${share.toFixed(
             0
-          )}% of hours retained.`
+          )} % des heures sont conservées.`
         );
       }
     }
     if (result.ref.length < 3) {
-      warnings.push("Fewer than three reference farms remain: validation may not be representative.");
+      warnings.push("Il reste moins de trois parcs de référence ; la validation peut ne pas être représentative.");
     }
     if (satelliteError) warnings.push(satelliteError);
     return warnings;
@@ -544,7 +544,7 @@
       response = await fetch(url);
     }
     if (!response.ok) {
-      throw new Error(`Open-Meteo request failed: HTTP ${response.status}`);
+      throw new Error(`La requête Open-Meteo a échoué : HTTP ${response.status}.`);
     }
     const payload = await response.json();
     if (
@@ -552,7 +552,7 @@
       !payload.hourly?.wind_speed_100m ||
       payload.hourly.time.length !== payload.hourly.wind_speed_100m.length
     ) {
-      throw new Error("Open-Meteo did not return aligned hourly wind values.");
+      throw new Error("Open-Meteo n’a pas renvoyé des valeurs horaires de vent correctement alignées.");
     }
     const values = new Map();
     payload.hourly.time.forEach((time, index) => {
@@ -565,7 +565,7 @@
         hourlyMean.set(timestamp, (value + values.get(timestamp + HOUR_MS)) / 2);
       }
     }
-    if (!hourlyMean.size) throw new Error("No usable site wind hours were returned.");
+    if (!hourlyMean.size) throw new Error("Aucune donnée horaire de vent exploitable n’a été renvoyée pour le site.");
     siteWindCache.set(cacheKey, hourlyMean);
     return hourlyMean;
   }
@@ -593,16 +593,16 @@
     const required = ["lat", "lon", "turbines", "turbineMw", "startDate", "endDate", "regimeThreshold", "vOk", "stopThreshold", "minHours", "satelliteRadius"];
     for (const key of required) {
       if (options[key] === "" || Number.isNaN(options[key])) {
-        throw new Error(`Missing or invalid value for ${key}.`);
+        throw new Error(`Valeur manquante ou invalide : ${key}.`);
       }
     }
-    if (options.lat < -85 || options.lat > 85) throw new Error("Latitude must be between -85 and 85.");
-    if (options.lon < -180 || options.lon > 180) throw new Error("Longitude must be between -180 and 180.");
-    if (options.turbines <= 0 || !Number.isInteger(options.turbines)) throw new Error("Turbine count must be a positive integer.");
-    if (options.turbineMw <= 0) throw new Error("MW per turbine must be positive.");
-    if (options.startDate >= options.endDate) throw new Error("End date must be after start date.");
-    if (options.minHours <= 0 || !Number.isInteger(options.minHours)) throw new Error("Minimum hours must be a positive integer.");
-    if (options.satelliteRadius <= 0 || options.satelliteRadius > 500) throw new Error("Satellite radius must be between 1 and 500 km.");
+    if (options.lat < -85 || options.lat > 85) throw new Error("La latitude doit être comprise entre −85 et 85.");
+    if (options.lon < -180 || options.lon > 180) throw new Error("La longitude doit être comprise entre −180 et 180.");
+    if (options.turbines <= 0 || !Number.isInteger(options.turbines)) throw new Error("Le nombre d’éoliennes doit être un entier positif.");
+    if (options.turbineMw <= 0) throw new Error("La puissance par éolienne doit être positive.");
+    if (options.startDate >= options.endDate) throw new Error("La date de fin doit être postérieure à la date de début.");
+    if (options.minHours <= 0 || !Number.isInteger(options.minHours)) throw new Error("Le nombre minimal d’heures doit être un entier positif.");
+    if (options.satelliteRadius <= 0 || options.satelliteRadius > 500) throw new Error("Le rayon satellite doit être compris entre 1 et 500 km.");
   }
 
   function setStatus(text, type) {
@@ -612,17 +612,17 @@
   }
 
   function format(value, digits = 3) {
-    return Number.isFinite(value) ? value.toFixed(digits) : "n/a";
+    return Number.isFinite(value) ? value.toFixed(digits) : "indisponible";
   }
 
   function formatPercent(value, digits = 1) {
-    return Number.isFinite(value) ? `${(100 * value).toFixed(digits)}%` : "n/a";
+    return Number.isFinite(value) ? `${(100 * value).toFixed(digits)} %` : "indisponible";
   }
 
   function formatNumber(value, digits = 0) {
     return Number.isFinite(value)
-      ? value.toLocaleString("en-GB", { maximumFractionDigits: digits })
-      : "n/a";
+      ? value.toLocaleString("fr-FR", { maximumFractionDigits: digits })
+      : "indisponible";
   }
 
   function formatDateTime(timestamp) {
@@ -675,7 +675,7 @@
           fill: "tonexty",
           fillcolor: "rgba(15, 111, 120, 0.12)",
           line: { width: 0 },
-          name: "Reference farm range",
+          name: "Plage des parcs de référence",
           hoverinfo: "skip",
         },
         {
@@ -684,9 +684,9 @@
           x: xKmh,
           y: result.curve.map((value) => value * rated),
           line: { color: "#0f6f78", width: 3 },
-          name: "Gross curve",
+          name: "Courbe brute",
           customdata: result.counts,
-          hovertemplate: "Wind %{x:.1f} km/h<br>Gross %{y:.1f} MW<br>%{customdata} reference hours<extra></extra>",
+          hovertemplate: "Vent : %{x:.1f} km/h<br>Puissance brute : %{y:.1f} MW<br>%{customdata} heures de référence<extra></extra>",
         },
         {
           type: "scatter",
@@ -694,18 +694,18 @@
           x: xKmh,
           y: result.curve.map((value) => value * rated * result.energyCalibration),
           line: { color: "#d45b45", width: 2.5, dash: "dot" },
-          name: "Net curve (calibrated)",
-          hovertemplate: "Wind %{x:.1f} km/h<br>Net %{y:.1f} MW<extra></extra>",
+          name: "Courbe nette (calibrée)",
+          hovertemplate: "Vent : %{x:.1f} km/h<br>Puissance nette : %{y:.1f} MW<extra></extra>",
         },
       ],
       chartLayout({
         xaxis: {
-          title: { text: "Wind speed at 100 m (km/h)" },
+          title: { text: "Vitesse du vent à 100 m (km/h)" },
           gridcolor: "rgba(8,37,47,0.08)",
           zeroline: false,
         },
         yaxis: {
-          title: { text: "Power (MW)" },
+          title: { text: "Puissance (MW)" },
           gridcolor: "rgba(8,37,47,0.08)",
           zeroline: false,
         },
@@ -752,12 +752,12 @@
           x: histogramCounts.map((_, index) => (index + 0.5) * MS_TO_KMH),
           y: histogramCounts,
           marker: { color: "#6cc7c2", line: { width: 0 } },
-          hovertemplate: "%{x:.1f} km/h<br>%{y} hours<extra></extra>",
+          hovertemplate: "%{x:.1f} km/h<br>%{y} heures<extra></extra>",
         },
       ],
       chartLayout({
-        xaxis: { title: { text: "Wind speed at 100 m (km/h)" }, gridcolor: "rgba(8,37,47,0.06)" },
-        yaxis: { title: { text: "Hours" }, gridcolor: "rgba(8,37,47,0.08)" },
+        xaxis: { title: { text: "Vitesse du vent à 100 m (km/h)" }, gridcolor: "rgba(8,37,47,0.06)" },
+        yaxis: { title: { text: "Heures" }, gridcolor: "rgba(8,37,47,0.08)" },
         shapes: [
           {
             type: "line",
@@ -785,7 +785,7 @@
       [
         {
           type: "bar",
-          name: "Mean wind speed",
+          name: "Vitesse moyenne du vent",
           x: MONTH_LABELS,
           y: monthWind.map((values) => mean(values)),
           marker: { color: "#6cc7c2" },
@@ -795,7 +795,7 @@
         {
           type: "scatter",
           mode: "lines+markers",
-          name: "Mean net power",
+          name: "Puissance nette moyenne",
           x: MONTH_LABELS,
           y: monthPower.map((values) => mean(values)),
           line: { color: "#0f6f78", width: 3 },
@@ -805,14 +805,14 @@
         },
       ],
       chartLayout({
-        xaxis: { title: { text: "Month" } },
+        xaxis: { title: { text: "Mois" } },
         yaxis: {
-          title: { text: "Mean wind speed (km/h)", font: { color: "#3c9d99" } },
+          title: { text: "Vitesse moyenne du vent (km/h)", font: { color: "#3c9d99" } },
           tickfont: { color: "#3c9d99" },
           gridcolor: "rgba(8,37,47,0.06)",
         },
         yaxis2: {
-          title: { text: "Mean net power (MW)", font: { color: "#0f6f78" } },
+          title: { text: "Puissance nette moyenne (MW)", font: { color: "#0f6f78" } },
           tickfont: { color: "#0f6f78" },
           overlaying: "y",
           side: "right",
@@ -829,12 +829,12 @@
     const note = document.getElementById("mapNote");
     if (!options.satelliteEnabled) {
       mapElement.style.display = "none";
-      note.textContent = "Satellite context disabled.";
+      note.textContent = "Contexte satellite désactivé.";
       return;
     }
     mapElement.style.display = "block";
     if (!window.L) {
-      note.textContent = "The map library could not be loaded.";
+      note.textContent = "Impossible de charger la bibliothèque cartographique.";
       return;
     }
     const source = SATELLITE_SOURCES[options.satelliteSource] || SATELLITE_SOURCES.eox2016;
@@ -853,7 +853,7 @@
       attribution: source.attribution,
     }).addTo(siteMap);
     overlayLayer = window.L.layerGroup().addTo(siteMap);
-    window.L.marker([options.lat, options.lon]).addTo(overlayLayer).bindPopup("Selected site");
+    window.L.marker([options.lat, options.lon]).addTo(overlayLayer).bindPopup("Site sélectionné");
     const circle = window.L.circle([options.lat, options.lon], {
       radius: options.satelliteRadius * 1000,
       color: "#f2b544",
@@ -875,16 +875,16 @@
     const bounds = circle.getBounds();
     if (bounds.isValid()) siteMap.fitBounds(bounds, { padding: [16, 16] });
     window.setTimeout(() => siteMap.invalidateSize(), 120);
-    note.textContent = `Site, ${options.satelliteRadius} km radius and reference farms. ${source.attribution}`;
+    note.textContent = `Site, rayon de ${options.satelliteRadius} km et parcs de référence. ${source.attribution}`;
   }
 
   function renderResults(options, result, warnings, satelliteError) {
     document.getElementById("siteSummary").textContent =
-      `${options.turbines} × ${options.turbineMw} MW = ${formatNumber(result.rated)} MW · ${options.startDate} to ${options.endDate} · ${options.model || "default Open-Meteo model"}`;
+      `${options.turbines} × ${options.turbineMw} MW = ${formatNumber(result.rated)} MW · du ${options.startDate} au ${options.endDate} · ${options.model || "modèle Open-Meteo par défaut"}`;
     document.getElementById("netCf").textContent = formatPercent(result.netCf);
     document.getElementById("annualEnergy").textContent = `${formatNumber(
       (mean(result.site.map((item) => item.net)) * 8766) / 1000
-    )} GWh/year`;
+    )} GWh/an`;
 
     resultsSection.hidden = false;
     drawCharts(result);
@@ -893,7 +893,7 @@
     warningList.innerHTML = "";
     if (!warnings.length) {
       const item = document.createElement("li");
-      item.textContent = "No specific warnings for this run.";
+      item.textContent = "Aucun point d’attention particulier pour cette estimation.";
       warningList.appendChild(item);
     } else {
       warnings.forEach((warning) => {
@@ -943,14 +943,14 @@
 
   function buildReport(options, result, warnings) {
     const lines = [
-      `SITE: ${options.turbines} x ${options.turbineMw} MW = ${result.rated.toFixed(0)} MW | selected production/wind time shift: ${result.lag >= 0 ? "+" : ""}${result.lag} h`,
-      `CAPACITY FACTOR: gross ${(100 * result.grossCf).toFixed(1)}% net ${(100 * result.netCf).toFixed(1)}% | mean net energy ${((mean(result.site.map((item) => item.net)) * 8766) / 1000).toFixed(0)} GWh/year`,
-      `APPARENT TIME AVAILABILITY: ${(100 * result.timeAvailability).toFixed(1)}% (wind ${(options.vOk * MS_TO_KMH).toFixed(1)}–${(25 * MS_TO_KMH).toFixed(1)} km/h, production below ${(100 * options.stopThreshold).toFixed(1)}% of rated capacity)`,
-      `ENERGY CALIBRATION FACTOR: ${(100 * result.energyCalibration).toFixed(1)}% (observed/modelled reference production; not technical availability)`,
+      `SITE : ${options.turbines} x ${options.turbineMw} MW = ${result.rated.toFixed(0)} MW | décalage production/vent sélectionné : ${result.lag >= 0 ? "+" : ""}${result.lag} h`,
+      `FACTEUR DE CHARGE : brut ${(100 * result.grossCf).toFixed(1)} % ; net ${(100 * result.netCf).toFixed(1)} % | énergie nette moyenne ${((mean(result.site.map((item) => item.net)) * 8766) / 1000).toFixed(0)} GWh/an`,
+      `DISPONIBILITÉ TEMPORELLE APPARENTE : ${(100 * result.timeAvailability).toFixed(1)} % (vent de ${(options.vOk * MS_TO_KMH).toFixed(1)} à ${(25 * MS_TO_KMH).toFixed(1)} km/h, production sous ${(100 * options.stopThreshold).toFixed(1)} % de la puissance nominale)`,
+      `FACTEUR DE CALIBRATION ÉNERGÉTIQUE : ${(100 * result.energyCalibration).toFixed(1)} % (production de référence observée/modélisée ; ce n’est pas une disponibilité technique)`,
       "",
-      "ESTABLISHED-OPERATION PERIOD USED PER FARM (ramp-up excluded):",
+      "PÉRIODE DE RÉGIME ÉTABLI PAR PARC (montée en puissance exclue) :",
       textTable(
-        ["Farm", "Established start", "Hours used", "Total hours", "Share used %"],
+        ["Parc", "Début du régime établi", "Heures retenues", "Total d’heures", "Part retenue %"],
         result.windows.map((item) => [
           item.farm,
           item.start,
@@ -960,9 +960,9 @@
         ])
       ),
       "",
-      "REFERENCE FARMS:",
+      "PARCS DE RÉFÉRENCE :",
       textTable(
-        ["Farm", "Hours", "Mean wind km/h", "Observed CF", "Raw model CF", "Availability", "Calibration"],
+        ["Parc", "Heures", "Vent moyen km/h", "Facteur de charge observé", "Facteur de charge brut modélisé", "Disponibilité", "Calibration"],
         result.ref.map((item) => [
           item.farm,
           item.hours,
@@ -974,9 +974,9 @@
         ])
       ),
       "",
-      "LEAVE-ONE-FARM-OUT VALIDATION:",
+      "VALIDATION EN RETIRANT UN PARC À LA FOIS :",
       textTable(
-        ["Farm", "Hours", "Observed CF", "Predicted CF", "Bias points", "Correlation", "RMSE % Pnom"],
+        ["Parc", "Heures", "Facteur observé", "Facteur prédit", "Biais (points)", "Corrélation", "RMSE % Pnom"],
         result.validation.map((item) => [
           item.farm,
           item.hours,
@@ -988,9 +988,9 @@
         ])
       ),
       "",
-      "REFERENCE SENSITIVITY:",
+      "SENSIBILITÉ AUX PARCS DE RÉFÉRENCE :",
       textTable(
-        ["Farm removed", "Training farms", "Validated range km/h", "Site hours outside %", "Calibration %", "Gross CF %", "Net CF %", "Net CF change points"],
+        ["Parc retiré", "Parcs d’apprentissage", "Plage validée km/h", "Heures du site hors plage %", "Calibration %", "Facteur brut %", "Facteur net %", "Variation du facteur net (points)"],
         result.sensitivity.map((item) => [
           item.removed,
           item.farms,
@@ -1003,14 +1003,14 @@
         ])
       ),
       "",
-      `VALIDATED REFERENCE WIND-SPEED RANGE: ${(result.vmin * MS_TO_KMH).toFixed(2)}–${(result.vmax * MS_TO_KMH).toFixed(2)} km/h`,
-      `Site hours below range: ${result.belowPct.toFixed(2)}%; above range: ${result.abovePct.toFixed(2)}%.`,
-      `Share of modelled energy outside the range: ${result.outsideEnergyPct.toFixed(2)}%.`,
-      `Sensitivity scenario only: net capacity factor would be ${(100 * result.netCfNoHighExtrapolation).toFixed(1)}% if production were zero above ${(result.vmax * MS_TO_KMH).toFixed(2)} km/h.`,
+      `PLAGE DE VENT DES RÉFÉRENCES VALIDÉE : ${(result.vmin * MS_TO_KMH).toFixed(2)}–${(result.vmax * MS_TO_KMH).toFixed(2)} km/h`,
+      `Heures du site sous la plage : ${result.belowPct.toFixed(2)} % ; au-dessus : ${result.abovePct.toFixed(2)} %.`,
+      `Part de l’énergie modélisée hors plage : ${result.outsideEnergyPct.toFixed(2)} %.`,
+      `Scénario indicatif : le facteur de charge net serait de ${(100 * result.netCfNoHighExtrapolation).toFixed(1)} % si la production était nulle au-delà de ${(result.vmax * MS_TO_KMH).toFixed(2)} km/h.`,
       "",
-      "PRODUCTION COVERAGE:",
+      "COUVERTURE DES DONNÉES DE PRODUCTION :",
       textTable(
-        ["Farm", "Expected wind hours", "Production hours", "Missing hours", "Coverage %", "Missing periods", "Longest gap h"],
+        ["Parc", "Heures de vent attendues", "Heures de production", "Heures manquantes", "Couverture %", "Périodes manquantes", "Lacune max. (h)"],
         result.coverage.map((item) => [
           item.farm,
           item.expected,
@@ -1022,19 +1022,19 @@
         ])
       ),
       "",
-      "SITE NET CAPACITY FACTOR BY YEAR:",
-      result.annual.map(([year, value]) => `${year}: ${(100 * value).toFixed(1)}%`).join("\n"),
+      "FACTEUR DE CHARGE NET DU SITE PAR ANNÉE :",
+      result.annual.map(([year, value]) => `${year} : ${(100 * value).toFixed(1)} %`).join("\n"),
       "",
-      "WARNINGS:",
-      ...(warnings.length ? warnings.map((warning) => ` - ${warning}`) : [" - none"]),
+      "POINTS D’ATTENTION :",
+      ...(warnings.length ? warnings.map((warning) => ` - ${warning}`) : [" - aucun"]),
       "",
-      "METHOD:",
-      "- ERA5 wind at 100 m is averaged over each hour using the values at both ends of the hour.",
-      "- Reference production is clipped at zero and normalized by installed capacity.",
-      "- Ramp-up is excluded using the established-operation threshold.",
-      "- The curve is the hour-weighted median capacity factor per 0.5 m/s bin.",
-      "- The energy calibration factor is observed divided by modelled reference production.",
-      "- The site uses the reference curve and ERA5 site wind; above the validated range a plateau is assumed.",
+      "MÉTHODE :",
+      "- Le vent ERA5 à 100 m est moyenné sur chaque heure à partir des valeurs en début et en fin d’heure.",
+      "- La production de référence est ramenée à zéro si elle est négative, puis normalisée par la puissance installée.",
+      "- La montée en puissance est exclue à l’aide du seuil de régime établi.",
+      "- La courbe utilise le facteur de charge médian par tranche de 0,5 m/s, pondéré par le nombre d’heures.",
+      "- Le facteur de calibration énergétique correspond à la production de référence observée divisée par la production modélisée.",
+      "- Le site utilise la courbe de référence et le vent ERA5 local ; un plateau est supposé au-delà de la plage validée.",
     ];
     return lines.join("\n") + "\n";
   }
@@ -1051,24 +1051,24 @@
     }
     document.getElementById("runButton").disabled = true;
     try {
-      setStatus("Building the reference model…", "loading");
+      setStatus("Construction du modèle de référence…", "loading");
       await new Promise((resolve) => window.setTimeout(resolve, 30));
       const { lag } = bestLag();
-      setStatus("Fetching ERA5 wind for the site…", "loading");
+      setStatus("Récupération du vent ERA5 pour le site…", "loading");
       const siteWind = await fetchSiteWind(options);
-      setStatus("Calculating site output and validation…", "loading");
+      setStatus("Calcul de la production du site et validation…", "loading");
       await new Promise((resolve) => window.setTimeout(resolve, 30));
       const result = analyze(options, siteWind, lag);
       let satelliteError = null;
       if (options.satelliteEnabled && !window.L) {
-        satelliteError = "Satellite map library could not be loaded.";
+        satelliteError = "Impossible de charger la bibliothèque cartographique satellite.";
       }
       const warnings = buildWarnings(options, result, satelliteError);
-      setStatus(`Done: ${result.site.length.toLocaleString("en-GB")} site hours modelled.`, "");
+      setStatus(`Terminé : ${result.site.length.toLocaleString("fr-FR")} heures du site modélisées.`, "");
       renderResults(options, result, warnings, satelliteError);
     } catch (error) {
       console.error(error);
-      setStatus(`Error: ${error.message}`, "error");
+      setStatus(`Erreur : ${error.message}`, "error");
     } finally {
       document.getElementById("runButton").disabled = false;
     }
@@ -1081,7 +1081,7 @@
       if (input.type === "checkbox") input.checked = value;
       else input.value = value;
     });
-    setStatus("Defaults restored. Ready.", "");
+    setStatus("Valeurs par défaut rétablies. Prêt.", "");
     resultsSection.hidden = true;
     lastRun = null;
   });

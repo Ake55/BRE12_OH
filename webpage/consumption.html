@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Compare French offshore wind production with the residential electricity consumption of a commune.">
-  <title>Commune coverage — OceanMarathon</title>
+  <meta name="description" content="Comparez la production éolienne en mer française à la consommation électrique résidentielle d’une commune.">
+  <title>Couverture des communes — OceanMarathon</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="farm.css">
 </head>
 <body>
-  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false" aria-label="Open project menu">
+  <a class="site-brand" href="index.html" aria-label="Accueil OceanMarathon">
+    <img src="Images/mais%20combien%20produit%20un%20parc%20e%CC%81olien%20en%20mer%20.png" alt="Logo ÉOLIMPIDE">
+  </a>
+  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"   aria-label="Ouvrir le menu du projet">
     <span class="panel-toggle__icon" aria-hidden="true">
       <span></span>
       <span></span>
@@ -20,56 +23,56 @@
 
   <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
 
-  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+  <aside class="side-panel" id="sidePanel" aria-label="Menu du projet" aria-hidden="true">
     <div class="side-panel__inner">
       <p class="eyebrow">BRET12 · CEREMA</p>
       <h2 class="side-panel__title">OceanMarathon</h2>
-      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+      <p class="side-panel__lead">Passer des hypothèses sur l’éolien en mer à des mesures réelles.</p>
 
-      <nav class="side-nav" aria-label="Site navigation">
-        <a href="index.html">Overview</a>
-        <a href="all4windfarms.html">All four wind farms</a>
+      <nav class="side-nav" aria-label="Navigation du site">
+        <a href="index.html">Accueil</a>
+        <a href="all4windfarms.html">Les quatre parcs</a>
         <a href="saint-nazaire.html">Saint-Nazaire</a>
         <a href="saint-brieuc.html">Saint-Brieuc</a>
         <a href="fecamp.html">Fécamp</a>
         <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a>
-        <a href="consumption.html" aria-current="page">Commune coverage</a>
-        <a href="new-wind-farm.html">New wind farm</a>
-        <a href="index.html#story">The story</a>
-        <a href="index.html#approach">Our approach</a>
-        <a href="index.html#challenge">The 48-hour challenge</a>
-        <a href="index.html#data">Source data</a>
+        <a href="consumption.html" aria-current="page">Couverture des communes</a>
+        <a href="new-wind-farm.html">Nouveau parc éolien</a>
+        <a href="index.html#story">Le constat</a>
+        <a href="index.html#approach">Notre démarche</a>
+        <a href="index.html#challenge">Le défi de 48 heures</a>
+        <a href="index.html#data">Données sources</a>
       </nav>
 
       <div class="side-panel__facts">
-        <h3>Project facts</h3>
+        <h3>Le projet en bref</h3>
         <dl>
           <div>
             <dt>Organisation</dt>
             <dd>CEREMA</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>Lieu</dt>
             <dd>Brest, France</dd>
           </div>
           <div>
-            <dt>Challenge owner</dt>
+            <dt>Responsable du défi</dt>
             <dd>Matthieu Suire</dd>
           </div>
           <div>
-            <dt>Focus</dt>
-            <dd>Climate, energy and spatial planning</dd>
+            <dt>Thématiques</dt>
+            <dd>Climat, énergie et aménagement du territoire</dd>
           </div>
           <div>
-            <dt>Dataset</dt>
-            <dd>30,701 hourly readings across four French offshore farms, 2023–2026</dd>
+            <dt>Jeu de données</dt>
+            <dd>30 701 relevés horaires pour quatre parcs éoliens en mer français, de 2023 à 2026</dd>
           </div>
         </dl>
       </div>
 
       <div class="side-panel__footer">
-        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo: Nicholas Doherty</a>
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visiter le CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo : Nicholas Doherty</a>
       </div>
     </div>
   </aside>
@@ -77,17 +80,17 @@
   <main>
     <section class="subpage-head">
       <div class="container">
-        <a class="back-link" href="index.html">Back to overview</a>
-        <p class="eyebrow eyebrow--light">Consumption context · BRET12</p>
-        <h1>What could offshore wind cover?</h1>
+        <a class="back-link" href="index.html">Retour à l’accueil</a>
+        <p class="eyebrow eyebrow--light">Mise en perspective · BRET12</p>
+        <h1>Que peut couvrir l’éolien en mer ?</h1>
         <p>
-          Compare a farm's annual production with the residential electricity
-          consumption of any French commune.
+          Comparez la production annuelle d’un parc à la consommation électrique résidentielle
+          de n’importe quelle commune française.
         </p>
         <div class="farm-meta">
-          <span>Four farms</span>
-          <span>34,900 communes</span>
-          <span>2.223 MWh per person per year</span>
+          <span>Quatre parcs</span>
+          <span>34 900 communes</span>
+          <span>2,223 MWh par personne et par an</span>
         </div>
       </div>
     </section>
@@ -96,53 +99,53 @@
       <div class="container">
         <div class="analysis-head">
           <div>
-            <p class="eyebrow">Commune coverage</p>
-            <h2>Farm output vs local consumption</h2>
+            <p class="eyebrow">Couverture des communes</p>
+            <h2>Production du parc et consommation locale</h2>
           </div>
           <p>
-            Choose a farm, a commune and a year to see how much of the commune
-            residents' electricity use the farm's production could cover.
+            Choisissez un parc, une commune et une année pour comparer la production du parc
+            à la consommation électrique de ses habitants.
           </p>
         </div>
 
         <div class="consumption-controls">
           <label class="year-control" for="coverageFarm">
-            <span>Wind farm</span>
+            <span>Parc éolien</span>
             <select id="coverageFarm"></select>
           </label>
           <div class="commune-control">
             <label class="control-label" for="communeSearch">Commune</label>
             <div class="commune-search">
-              <input id="communeSearch" type="search" placeholder="Search a commune" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeResults">
+              <input id="communeSearch" type="search" placeholder="Rechercher une commune" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="communeResults">
               <div class="commune-results" id="communeResults" role="listbox" hidden></div>
             </div>
           </div>
           <label class="year-control" for="coverageYear">
-            <span>Year</span>
+            <span>Année</span>
             <select id="coverageYear"></select>
           </label>
         </div>
 
         <p class="consumption-intro">
-          The estimate assumes an average of 2.223 MWh of residential electricity
-          use per person per year. Commune searches show the department when names
-          repeat across France.
+          L’estimation repose sur une consommation électrique résidentielle moyenne de
+          2,223 MWh par personne et par an. Le département est indiqué lorsque plusieurs
+          communes portent le même nom.
         </p>
 
         <div class="consumption-card">
           <div class="coverage-panel">
             <span class="coverage-value" id="coveragePercent">—</span>
-            <span class="coverage-caption" id="coverageCaption">Choose a commune to see its coverage</span>
+            <span class="coverage-caption" id="coverageCaption">Choisissez une commune pour afficher le ratio</span>
             <div class="coverage-bar" aria-hidden="true"><span id="coverageBar"></span></div>
           </div>
           <div class="consumption-details">
             <div class="consumption-facts">
               <div>
-                <span>Farm production</span>
+                <span>Production du parc</span>
                 <strong id="consumptionFarm">—</strong>
               </div>
               <div>
-                <span>Residents' consumption</span>
+                <span>Consommation des habitants</span>
                 <strong id="consumptionDemand">—</strong>
               </div>
               <div>
@@ -151,31 +154,31 @@
               </div>
             </div>
             <p class="consumption-note" id="consumptionNote">
-              Select a farm, commune and year to compare production with local electricity demand.
+              Sélectionnez un parc, une commune et une année pour comparer la production à la demande locale.
             </p>
           </div>
         </div>
 
         <div class="method-strip">
           <article>
-            <h3>Farm production</h3>
+            <h3>Production du parc</h3>
             <p>
-              Annual production is the sum of hourly MW values, giving MWh. It uses
-              the same clean production data as the farm pages.
+              La production annuelle est la somme des valeurs horaires en MW, exprimée en MWh.
+              Elle utilise les mêmes données nettoyées que les pages des parcs.
             </p>
           </article>
           <article>
-            <h3>Local consumption</h3>
+            <h3>Consommation locale</h3>
             <p>
-              Residents' consumption is estimated from commune population and an
-              average of 2.223 MWh per person per year.
+              La consommation des habitants est estimée à partir de la population de la commune
+              et d’une moyenne de 2,223 MWh par personne et par an.
             </p>
           </article>
           <article>
-            <h3>Coverage</h3>
+            <h3>Ratio de couverture</h3>
             <p>
-              Coverage is farm production divided by residents' consumption over
-              the same period. Partial production years and missing hours are noted.
+              Le ratio correspond à la production du parc divisée par la consommation des
+              habitants sur la même période. Les années partielles et les heures manquantes sont signalées.
             </p>
           </article>
         </div>
@@ -187,11 +190,11 @@
     <div class="container footer__inner">
       <div>
         <p class="footer__brand">OceanMarathon</p>
-        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+        <p>Réalisé pour le défi BRET12 avec le CEREMA, à Brest.</p>
       </div>
       <div class="footer__links">
         <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo credit</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Crédit photo</a>
       </div>
     </div>
   </footer>

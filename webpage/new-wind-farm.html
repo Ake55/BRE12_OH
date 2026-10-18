@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Estimate the production of a hypothetical French offshore wind farm from GPS coordinates, turbine count and unit power.">
-  <title>New wind farm — OceanMarathon</title>
+    content="Estimez la production d’un parc éolien en mer hypothétique à partir de ses coordonnées, du nombre d’éoliennes et de leur puissance unitaire.">
+  <title>Nouveau parc éolien — OceanMarathon</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="extrapolate.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 <body>
+  <a class="site-brand" href="index.html" aria-label="Accueil OceanMarathon">
+    <img src="Images/mais%20combien%20produit%20un%20parc%20e%CC%81olien%20en%20mer%20.png" alt="Logo ÉOLIMPIDE">
+  </a>
   <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"
-    aria-label="Open project menu">
+    aria-label="Ouvrir le menu du projet">
     <span class="panel-toggle__icon" aria-hidden="true">
       <span></span>
       <span></span>
@@ -25,56 +28,56 @@
 
   <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
 
-  <aside class="side-panel" id="sidePanel" aria-label="Project menu" aria-hidden="true">
+  <aside class="side-panel" id="sidePanel" aria-label="Menu du projet" aria-hidden="true">
     <div class="side-panel__inner">
       <p class="eyebrow">BRET12 · CEREMA</p>
       <h2 class="side-panel__title">OceanMarathon</h2>
-      <p class="side-panel__lead">Turning assumptions about offshore wind into measurements.</p>
+      <p class="side-panel__lead">Passer des hypothèses sur l’éolien en mer à des mesures réelles.</p>
 
-      <nav class="side-nav" aria-label="Site navigation">
-        <a href="index.html">Overview</a>
-        <a href="all4windfarms.html">All four wind farms</a>
+      <nav class="side-nav" aria-label="Navigation du site">
+        <a href="index.html">Accueil</a>
+        <a href="all4windfarms.html">Les quatre parcs</a>
         <a href="saint-nazaire.html">Saint-Nazaire</a>
         <a href="saint-brieuc.html">Saint-Brieuc</a>
         <a href="fecamp.html">Fécamp</a>
         <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a>
-        <a href="consumption.html">Commune coverage</a>
-        <a href="new-wind-farm.html" aria-current="page">New wind farm</a>
-        <a href="index.html#story">The story</a>
-        <a href="index.html#approach">Our approach</a>
-        <a href="index.html#challenge">The 48-hour challenge</a>
-        <a href="index.html#data">Source data</a>
+        <a href="consumption.html">Couverture des communes</a>
+        <a href="new-wind-farm.html" aria-current="page">Nouveau parc éolien</a>
+        <a href="index.html#story">Le constat</a>
+        <a href="index.html#approach">Notre démarche</a>
+        <a href="index.html#challenge">Le défi de 48 heures</a>
+        <a href="index.html#data">Données sources</a>
       </nav>
 
       <div class="side-panel__facts">
-        <h3>Project facts</h3>
+        <h3>Le projet en bref</h3>
         <dl>
           <div>
             <dt>Organisation</dt>
             <dd>CEREMA</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>Lieu</dt>
             <dd>Brest, France</dd>
           </div>
           <div>
-            <dt>Challenge owner</dt>
+            <dt>Responsable du défi</dt>
             <dd>Matthieu Suire</dd>
           </div>
           <div>
-            <dt>Focus</dt>
-            <dd>Climate, energy and spatial planning</dd>
+            <dt>Thématiques</dt>
+            <dd>Climat, énergie et aménagement du territoire</dd>
           </div>
           <div>
-            <dt>Reference dataset</dt>
-            <dd>Four French offshore farms, 2023–2026</dd>
+            <dt>Données de référence</dt>
+            <dd>Quatre parcs éoliens en mer français, de 2023 à 2026</dd>
           </div>
         </dl>
       </div>
 
       <div class="side-panel__footer">
-        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visit CEREMA</a>
-        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo:
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visiter le CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo :
           Nicholas Doherty</a>
       </div>
     </div>
@@ -83,18 +86,18 @@
   <main>
     <section class="subpage-head">
       <div class="container">
-        <a class="back-link" href="all4windfarms.html">Back to all farms</a>
-        <p class="eyebrow eyebrow--light">Site estimator · BRET12</p>
-        <h1>What would a new offshore wind farm produce?</h1>
+        <a class="back-link" href="all4windfarms.html">Retour aux quatre parcs</a>
+        <p class="eyebrow eyebrow--light">Estimateur de site · BRET12</p>
+        <h1>Que produirait un nouveau parc éolien en mer ?</h1>
         <p>
-          Choose a location, turbine count and unit power. The model learns from the
-          four French offshore farms and estimates the new site's power curve,
-          capacity factor and annual energy.
+          Choisissez un emplacement, un nombre d’éoliennes et leur puissance unitaire.
+          Le modèle s’appuie sur les quatre parcs français pour estimer la courbe de puissance,
+          le facteur de charge et l’énergie annuelle du nouveau site.
         </p>
         <div class="farm-meta">
-          <span>ERA5 wind</span>
-          <span>Four reference farms</span>
-          <span>Open and reproducible</span>
+          <span>Vent ERA5</span>
+          <span>Quatre parcs de référence</span>
+          <span>Ouvert et reproductible</span>
         </div>
       </div>
     </section>
@@ -103,12 +106,13 @@
       <div class="container">
         <div class="analysis-head">
           <div>
-            <p class="eyebrow">Site inputs</p>
-            <h2>Describe the new farm</h2>
+            <p class="eyebrow">Paramètres du site</p>
+            <h2>Décrivez le nouveau parc</h2>
           </div>
           <p>
-            Core site inputs. Advanced model thresholds use the original defaults.
-            Reference data is bundled with the site; satellite imagery is loaded live.
+            Renseignez les paramètres principaux du site. Les seuils avancés conservent leurs
+            valeurs par défaut. Les données de référence sont intégrées au site ; l’imagerie satellite
+            est chargée en direct.
           </p>
         </div>
 
@@ -123,43 +127,43 @@
               <input id="lon" name="lon" type="number" step="any" min="-180" max="180" value="-1.923" required>
             </label>
             <label class="form-field">
-              <span>Number of turbines</span>
+              <span>Nombre d’éoliennes</span>
               <input id="turbines" name="turbines" type="number" step="1" min="1" value="80" required>
             </label>
             <label class="form-field">
-              <span>MW per turbine</span>
+              <span>MW par éolienne</span>
               <input id="turbineMw" name="turbineMw" type="number" step="0.1" min="0.1" value="15" required>
             </label>
             <label class="form-field">
-              <span>Start date</span>
+              <span>Date de début</span>
               <input id="startDate" name="startDate" type="date" value="2016-01-01" required>
             </label>
             <label class="form-field">
-              <span>End date</span>
+              <span>Date de fin</span>
               <input id="endDate" name="endDate" type="date" value="2025-12-31" required>
             </label>
             <label class="form-field">
-              <span>Satellite radius (km)</span>
+              <span>Rayon satellite (km)</span>
               <input id="satelliteRadius" name="satelliteRadius" type="number" step="10" min="1" max="500" value="200">
             </label>
             <label class="form-field">
-              <span>Satellite source</span>
+              <span>Source satellite</span>
               <select id="satelliteSource" name="satelliteSource">
-                <option value="eox2016">Sentinel-2 cloudless 2016 (CC BY 4.0)</option>
-                <option value="eox2024">Sentinel-2 cloudless 2024 (non-commercial)</option>
-                <option value="esri">Esri World Imagery</option>
+                <option value="eox2016">Sentinel-2 sans nuages 2016 (CC BY 4.0)</option>
+                <option value="eox2024">Sentinel-2 sans nuages 2024 (usage non commercial)</option>
+                <option value="esri">Imagerie mondiale Esri</option>
               </select>
             </label>
             <label class="form-check">
               <input id="satelliteEnabled" name="satelliteEnabled" type="checkbox" checked>
-              <span>Show satellite context</span>
+              <span>Afficher le contexte satellite</span>
             </label>
           </div>
           <div class="form-actions">
-            <button class="button button--primary" id="runButton" type="submit">Estimate production</button>
-            <button class="button button--ghost button--ghost-dark" id="resetButton" type="button">Reset
-              defaults</button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite">Ready.</p>
+            <button class="button button--primary" id="runButton" type="submit">Estimer la production</button>
+            <button class="button button--ghost button--ghost-dark" id="resetButton" type="button">Rétablir
+              les valeurs par défaut</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite">Prêt.</p>
           </div>
         </form>
       </div>
@@ -169,87 +173,87 @@
       <div class="container">
         <div class="analysis-head">
           <div>
-            <p class="eyebrow">Site estimate</p>
-            <h2>Predicted output</h2>
+            <p class="eyebrow">Estimation du site</p>
+            <h2>Production estimée</h2>
           </div>
-          <p id="siteSummary">Run the estimator to see the site results.</p>
+          <p id="siteSummary">Lancez l’estimation pour afficher les résultats du site.</p>
         </div>
 
         <div class="result-metrics">
           <div class="result-metric result-metric--accent">
-            <span>Net capacity factor</span>
+            <span>Facteur de charge net</span>
             <strong id="netCf">—</strong>
           </div>
           <div class="result-metric">
-            <span>Mean net energy</span>
+            <span>Énergie nette moyenne</span>
             <strong id="annualEnergy">—</strong>
           </div>
         </div>
 
         <div class="result-grid result-grid--charts result-grid--curve">
           <article class="result-card">
-            <h3>Site wind distribution</h3>
-            <p>Hourly ERA5 wind at 100 m for the selected period.</p>
-            <div id="windChart" class="result-chart" role="img" aria-label="Site wind-speed histogram"></div>
+            <h3>Distribution du vent sur le site</h3>
+            <p>Vent ERA5 horaire à 100 m pour la période sélectionnée.</p>
+            <div id="windChart" class="result-chart" role="img" aria-label="Histogramme des vitesses du vent sur le site"></div>
           </article>
           <article class="result-card">
-            <h3>Site power curve</h3>
+            <h3>Courbe de puissance du site</h3>
             <p>
-              Gross and calibrated net output per wind-speed bin, with the range
-              between the reference farms. Grey areas are outside the validated
-              wind range.
+              Production brute et nette calibrée par tranche de vitesse du vent, avec la plage
+              observée entre les parcs de référence. Les zones grises se trouvent hors de la plage
+              de vent validée.
             </p>
-            <div id="curveChart" class="result-chart" role="img" aria-label="Estimated site power curve"></div>
+            <div id="curveChart" class="result-chart" role="img" aria-label="Courbe de puissance estimée du site"></div>
           </article>
         </div>
 
         <div class="result-grid result-grid--charts">
           <article class="result-card">
-            <h3>Monthly averages</h3>
-            <p>Mean wind speed and mean net power across the simulated period.</p>
-            <div id="monthlyChart" class="result-chart" role="img" aria-label="Monthly wind and net power"></div>
+            <h3>Moyennes mensuelles</h3>
+            <p>Vitesse moyenne du vent et puissance nette moyenne sur la période simulée.</p>
+            <div id="monthlyChart" class="result-chart" role="img" aria-label="Vent et puissance nette par mois"></div>
           </article>
           <article class="result-card">
-            <h3>Satellite context</h3>
-            <p id="mapNote">Site location, reference farms and selected radius.</p>
-            <div id="siteMap" class="site-map" role="img" aria-label="Satellite map around the selected site"></div>
+            <h3>Contexte satellite</h3>
+            <p id="mapNote">Emplacement du site, parcs de référence et rayon sélectionné.</p>
+            <div id="siteMap" class="site-map" role="img" aria-label="Carte satellite autour du site sélectionné"></div>
           </article>
         </div>
 
         <div class="result-card result-card--wide">
-          <h3>Warnings</h3>
+          <h3>Points d’attention</h3>
           <ul class="warning-list" id="warningList"></ul>
         </div>
 
         <div class="download-row">
-          <button class="button button--small" id="downloadCurve" type="button">Power curve CSV</button>
-          <button class="button button--small" id="downloadSeries" type="button">Hourly series CSV</button>
-          <button class="button button--small" id="downloadReport" type="button">Report TXT</button>
-          <button class="button button--small" id="downloadChart" type="button">Curve SVG</button>
+          <button class="button button--small" id="downloadCurve" type="button">Courbe de puissance CSV</button>
+          <button class="button button--small" id="downloadSeries" type="button">Série horaire CSV</button>
+          <button class="button button--small" id="downloadReport" type="button">Rapport TXT</button>
+          <button class="button button--small" id="downloadChart" type="button">Courbe SVG</button>
         </div>
 
         <details class="method-details">
-          <summary>Method and limits</summary>
+          <summary>Méthode et limites</summary>
           <div class="method-details__body">
             <p>
-              The curve is the median capacity factor per 0.5 m/s wind bin, combined
-              across the reference farms with hour weighting. Ramp-up is excluded
-              from each farm. The energy calibration factor is the ratio of observed
-              to modelled reference production. It is not a technical availability
-              measure.
+              La courbe représente le facteur de charge médian par tranche de vent de 0,5 m/s,
+              combiné entre les parcs de référence et pondéré par le nombre d’heures. La montée
+              en puissance de chaque parc est exclue. Le facteur de calibration énergétique est
+              le rapport entre la production de référence observée et celle modélisée ; ce n’est
+              pas une mesure de disponibilité technique.
             </p>
             <p>
-              ERA5 wind is a gridded reanalysis with known offshore biases. The
-              reference turbines are 6–8 MW units, so a very different turbine size
-              changes the real curve. Wake losses are implicitly included in the
-              reference data but no layout-specific correction is applied. Beyond
-              the validated wind range, the curve is an extrapolation.
+              Le vent ERA5 est une réanalyse sur grille, dont les biais au large sont connus.
+              Les éoliennes de référence ont une puissance de 6 à 8 MW : une puissance très
+              différente modifierait la courbe réelle. Les pertes de sillage sont implicitement
+              présentes dans les données de référence, mais aucune correction propre à
+              l’implantation n’est appliquée. Au-delà de la plage de vent validée, la courbe est extrapolée.
             </p>
             <p>
-              Satellite tiles: Sentinel-2 cloudless 2016 (CC BY 4.0), Sentinel-2
-              cloudless 2024 (CC BY-NC-SA 4.0, non-commercial), or Esri World Imagery
-              (check terms before commercial use). At a 200 km radius individual
-              turbines are not visible.
+              Tuiles satellite : Sentinel-2 sans nuages 2016 (CC BY 4.0), Sentinel-2
+              sans nuages 2024 (CC BY-NC-SA 4.0, usage non commercial) ou imagerie mondiale Esri
+              (vérifiez les conditions avant tout usage commercial). À un rayon de 200 km,
+              les éoliennes individuelles ne sont pas visibles.
             </p>
           </div>
         </details>
@@ -261,7 +265,7 @@
     <div class="container footer__inner">
       <div>
         <p class="footer__brand">OceanMarathon</p>
-        <p>Built for the BRET12 challenge with CEREMA, Brest.</p>
+        <p>Réalisé pour le défi BRET12 avec le CEREMA, à Brest.</p>
       </div>
       <div class="footer__links">
         <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>

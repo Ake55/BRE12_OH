@@ -10,13 +10,13 @@
   const noteElement = byId("consumptionNote");
 
   if (!coverageData || !communeData || !farmSelect || !yearSelect || !communeSearch || !communeResults) {
-    if (noteElement) noteElement.textContent = "Coverage data could not be loaded.";
+    if (noteElement) noteElement.textContent = "Impossible de charger les données de couverture.";
     return;
   }
 
-  const numberFormat = new Intl.NumberFormat("en-GB");
-  const dayFormat = new Intl.NumberFormat("en-GB", { maximumFractionDigits: 1 });
-  const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const numberFormat = new Intl.NumberFormat("fr-FR");
+  const dayFormat = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
+  const monthLabels = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
   const perCapitaMwh = coverageData.per_capita_mwh;
   let selectedCommune = null;
   let communeMatches = [];
@@ -40,15 +40,14 @@
 
   function formatEnergy(value) {
     if (value === null || value === undefined || Number.isNaN(value)) return "—";
-    if (Math.abs(value) >= 1_000_000) return `${(value / 1_000_000).toFixed(2)} TWh`;
-    if (Math.abs(value) >= 1_000) return `${(value / 1_000).toFixed(1)} GWh`;
-    return `${Math.round(value)} MWh`;
+    if (Math.abs(value) >= 1_000_000) return `${(value / 1_000_000).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} TWh`;
+    if (Math.abs(value) >= 1_000) return `${(value / 1_000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} GWh`;
+    return `${Math.round(value).toLocaleString("fr-FR")} MWh`;
   }
 
   function formatCoverage(value) {
     if (value === null || value === undefined || !Number.isFinite(value)) return "—";
-    const percent = value * 100;
-    return percent >= 10 ? `${Math.round(percent)}%` : `${percent.toFixed(1)}%`;
+    return `x${value.toFixed(2)}`;
   }
 
   function monthCoverage(annual) {
@@ -66,21 +65,12 @@
     const days = annual.period_hours / 24;
     const demandMwh = days * (perCapitaMwh / 365) * selectedCommune[3];
     const coverage = demandMwh > 0 ? annual.production_mwh / demandMwh : null;
-    const percent = coverage === null ? 0 : Math.max(0, coverage * 100);
+    const barWidth = coverage === null ? 0 : Math.min(100, Math.max(0, coverage * 100));
 
     byId("coveragePercent").textContent = formatCoverage(coverage);
-    let caption = `of ${selectedCommune[0]} residents' consumption over the same period`;
-    if (coverage !== null) {
-      if (coverage > 1) {
-        caption += `, i.e. ${Math.round((coverage - 1) * 100)}% more than they used`;
-      } else if (coverage < 1) {
-        caption += `, i.e. ${Math.round((1 - coverage) * 100)}% short of what they used`;
-      } else {
-        caption += ", i.e. exactly what they used";
-      }
-    }
+    const caption = `de la consommation électrique des habitants de ${selectedCommune[0]} sur la même période`;
     byId("coverageCaption").textContent = caption;
-    byId("coverageBar").style.width = `${Math.min(100, percent)}%`;
+    byId("coverageBar").style.width = `${barWidth}%`;
     byId("consumptionFarm").textContent = formatEnergy(annual.production_mwh);
     byId("consumptionDemand").textContent = formatEnergy(demandMwh);
     byId("consumptionPopulation").textContent = numberFormat.format(selectedCommune[3]);
@@ -88,14 +78,12 @@
     const months = monthCoverage(annual);
     const missingHours = annual.period_hours - annual.production_hours;
     let note =
-      `Estimate uses ${perCapitaMwh} MWh per person per year over ${dayFormat.format(days)} days.`;
-    if (months) note += ` Production data covers ${months} ${year}.`;
+      `Estimation fondée sur ${perCapitaMwh.toLocaleString("fr-FR")} MWh par personne et par an, sur ${dayFormat.format(days)} jours.`;
+    if (months) note += ` Les données de production couvrent la période ${months} ${year}.`;
     if (missingHours > 0) {
-      const hourWord = missingHours === 1 ? "hour" : "hours";
-      const verb = missingHours === 1 ? "contributes" : "contribute";
+      const hourWord = missingHours === 1 ? "heure" : "heures";
       note +=
-        ` ${numberFormat.format(missingHours)} ${hourWord} without a production value ` +
-        `${verb} no energy.`;
+        ` ${numberFormat.format(missingHours)} ${hourWord} sans valeur de production sont comptabilisées comme une production nulle.`;
     }
     noteElement.textContent = note;
   }
@@ -187,13 +175,13 @@
   communeSearch.addEventListener("input", () => {
     selectedCommune = null;
     byId("coveragePercent").textContent = "—";
-    byId("coverageCaption").textContent = "Choose a commune to see its coverage";
+    byId("coverageCaption").textContent = "Choisissez une commune pour afficher le ratio";
     byId("coverageBar").style.width = "0";
     byId("consumptionFarm").textContent = "—";
     byId("consumptionDemand").textContent = "—";
     byId("consumptionPopulation").textContent = "—";
     noteElement.textContent =
-      "Select a farm, commune and year to compare production with local electricity demand.";
+      "Sélectionnez un parc, une commune et une année pour comparer la production à la demande locale.";
     searchCommunes(communeSearch.value);
   });
 
