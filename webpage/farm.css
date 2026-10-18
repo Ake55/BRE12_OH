@@ -445,6 +445,77 @@
   font-size: 0.74rem;
 }
 
+.windrose-section {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: clamp(2.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.windrose-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.windrose-head .eyebrow {
+  margin-bottom: 0.6rem;
+}
+
+.windrose-head h2 {
+  margin-bottom: 0;
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+}
+
+.windrose-intro {
+  max-width: 820px;
+  margin-bottom: 1rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.windrose-chart {
+  width: 100%;
+  min-height: 420px;
+}
+
+.windrose-color-scale {
+  display: grid;
+  grid-template-columns: auto minmax(5rem, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 380px;
+  margin: 0.25rem auto 0;
+}
+
+.windrose-color-scale__value,
+.windrose-color-scale__label {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.windrose-color-scale__gradient {
+  height: 0.65rem;
+  border: 1px solid rgba(78, 54, 28, 0.25);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f6f0de 0%, #f2b544 50%, #b63026 100%);
+}
+
+.windrose-color-scale__label {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.windrose-note {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
 .consumption-section {
   margin-top: clamp(3rem, 6vw, 4.5rem);
   padding-top: clamp(2.5rem, 5vw, 3.5rem);

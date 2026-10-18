@@ -216,6 +216,25 @@
           </p>
         </section>
 
+        <section class="windrose-section" aria-labelledby="windRoseTitle" data-windrose-park="Saint-Brieuc">
+          <div class="windrose-head">
+            <div>
+              <p class="eyebrow">Direction du vent</p>
+              <h2 id="windRoseTitle">Heures et puissance par direction</h2>
+            </div>
+            <label class="year-control" for="windRoseYear">
+              <span>Année</span>
+              <select id="windRoseYear"></select>
+            </label>
+          </div>
+          <p class="windrose-intro">
+            Chaque triangle représente une direction : sa pointe est au centre et sa base s’étend selon la puissance
+            moyenne en MW. Sa couleur indique le nombre d’heures mesurées dans cette direction.
+          </p>
+          <div id="windRoseChart" class="windrose-chart" role="img" aria-label="Rosace de Saint-Brieuc : pointe des triangles au centre, base étendue selon la puissance moyenne en mégawatts et couleur selon le nombre d’heures par direction"></div>
+          <p class="windrose-note" id="windRoseNote" aria-live="polite">Chargement des données directionnelles.</p>
+        </section>
+
         <div class="method-strip">
           <article>
             <h3>Filtre de production</h3>
@@ -260,5 +279,6 @@
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
   <script src="script.js"></script>
   <script src="farm.js"></script>
+  <script src="windrose.js"></script>
 </body>
 </html>
