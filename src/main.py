@@ -7,7 +7,7 @@ WITHIN_CONSTRAINT_FILE = Path(__file__).parent / "data" / "production_offshore_f
 OVERSHOOT_FILE = Path(__file__).parent / "data" / "production_offshore_farms_overshoot.csv"
 
 CONSTRAINT_LOW = -10
-CONSTRAINT_HIGH = 490
+CONSTRAINT_HIGH = 500
 
 
 FARM_GROUPS = {

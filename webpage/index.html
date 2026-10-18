@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Ocean Hackaton — une exploration ouverte et reproductible des performances réelles des parcs éoliens en mer français.">
+  <title>Ocean Hackaton — La production réelle de l’éolien en mer français</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <a class="site-brand" href="index.html" aria-label="Accueil Ocean Hackaton">
+    <img src="Images/mais%20combien%20produit%20un%20parc%20e%CC%81olien%20en%20mer%20.png" alt="Logo ÉOLIMPIDE">
+  </a>
+  <button class="panel-toggle" id="panelToggle" type="button" aria-controls="sidePanel" aria-expanded="false"
+    aria-label="Ouvrir le menu du projet">
+    <span class="panel-toggle__icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <span class="panel-toggle__text">Menu</span>
+  </button>
+
+  <div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+
+  <aside class="side-panel" id="sidePanel" aria-label="Menu du projet" aria-hidden="true">
+    <div class="side-panel__inner">
+      <p class="eyebrow">BRET12 · CEREMA</p>
+      <h2 class="side-panel__title">Ocean Hackaton</h2>
+      <p class="side-panel__lead">Passer des hypothèses sur l’éolien en mer à des mesures réelles.</p>
+
+      <nav class="side-nav" aria-label="Navigation sur cette page">
+        <a href="#overview">Accueil</a>
+        <a href="all4windfarms.html">Les quatre parcs</a>
+        <a href="consumption.html">Couverture des communes</a>
+        <a href="new-wind-farm.html">Nouveau parc éolien</a>
+        <!-- <a href="saint-nazaire.html">Saint-Nazaire</a>
+        <a href="saint-brieuc.html">Saint-Brieuc</a>
+        <a href="fecamp.html">Fécamp</a>
+        <a href="yeu-noirmoutier.html">Yeu-Noirmoutier</a> -->
+        <a href="#story">Le constat</a>
+        <a href="#approach">Notre démarche</a>
+        <a href="#challenge">Le défi de 48 heures</a>
+        <a href="#data">Données sources</a>
+      </nav>
+
+      <div class="side-panel__facts">
+        <h3>Le projet en bref</h3>
+        <dl>
+          <div>
+            <dt>Organisation</dt>
+            <dd>CEREMA</dd>
+          </div>
+          <div>
+            <dt>Lieu</dt>
+            <dd>Brest, France</dd>
+          </div>
+          <div>
+            <dt>Responsable du défi</dt>
+            <dd>Matthieu Suire</dd>
+          </div>
+          <div>
+            <dt>Thématiques</dt>
+            <dd>Climat, énergie et aménagement du territoire</dd>
+          </div>
+          <div>
+            <dt>Jeu de données</dt>
+            <dd>30 701 relevés horaires pour quatre parcs éoliens en mer français, de 2023 à 2026</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="side-panel__footer">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">Visiter le CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Photo :
+          Nicholas Doherty</a>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__content reveal">
+        <p class="eyebrow eyebrow--light">BRET12 · CEREMA · Brest</p>
+        <h1>Que produisent <em>réellement</em> les parcs éoliens en mer français ?</h1>
+        <p class="hero__lead">
+          Avec l’électrification des transports, de l’industrie et du chauffage, nos besoins en
+          électricité décarbonée vont fortement augmenter. L’éolien en mer est un atout majeur
+          pour la France : des vents puissants et réguliers, et le deuxième domaine maritime
+          mondial. Pour en tirer le meilleur parti, il faut mesurer ce que ces parcs produisent vraiment.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#story">Découvrir le constat</a>
+          <a class="button button--ghost" href="#challenge">Voir le défi</a>
+        </div>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span>
+        Faites défiler pour découvrir
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Le projet en un coup d’œil">
+      <div class="container stats__grid">
+        <div class="stat reveal">
+          <strong>4</strong>
+          <span>parcs éoliens en mer</span>
+        </div>
+        <div class="stat reveal">
+          <strong>30,701</strong>
+          <span>heures de données de production réelle</span>
+        </div>
+        <div class="stat reveal">
+          <strong>2023–2026</strong>
+          <span>mesurées heure par heure</span>
+        </div>
+        <div class="stat reveal">
+          <strong>Mesuré</strong>
+          <span>pas supposé</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story" id="story">
+      <div class="container story__grid">
+        <div class="story__intro reveal">
+          <p class="eyebrow">Le constat</p>
+          <h2>Entre théorie et réalité</h2>
+        </div>
+        <div class="story__copy reveal">
+          <p class="story__lead">
+            Aujourd’hui, nous nous appuyons sur des courbes de puissance théoriques, établies à
+            partir de modèles et d’essais en soufflerie sur une éolienne isolée.
+          </p>
+          <p>
+            En mer, un parc se comporte tout autrement : effets de sillage entre les éoliennes,
+            direction du vent, maintenance et bien d’autres facteurs entrent en jeu. Pourtant,
+            l’écart entre théorie et réalité reste peu documenté, alors que cette industrie
+            représente des investissements de plusieurs milliards d’euros.
+          </p>
+          <p>
+            Pour la première fois, plusieurs années de production horaire réelle des parcs français
+            sont accessibles. En les croisant avec des données de vent ouvertes, nous pouvons
+            reconstituer leur production réelle et comprendre pourquoi elle diffère des modèles.
+          </p>
+          <blockquote>
+            L’objectif : analyser ouvertement et de façon reproductible les performances de l’éolien
+            en mer, et remplacer <strong>« nous supposons »</strong> par <strong>« nous avons mesuré ».</strong>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cards-section" aria-label="Pourquoi c’est important">
+      <div class="container">
+        <div class="card-grid">
+          <article class="card reveal">
+            <span class="card__number">01</span>
+            <h3>L’angle mort</h3>
+            <p>
+              Les courbes de puissance reposent sur des modèles et des essais en soufflerie
+              réalisés sur une seule éolienne. Elles ne décrivent pas le comportement d’un parc entier en mer.
+            </p>
+          </article>
+          <article class="card reveal">
+            <span class="card__number">02</span>
+            <h3>La réalité</h3>
+            <p>
+              Les sillages, la direction du vent, la maintenance et l’exploitation influencent la
+              production. L’écart entre prévision et réalité existe et s’amplifie à l’échelle d’un parc.
+            </p>
+          </article>
+          <article class="card reveal">
+            <span class="card__number">03</span>
+            <h3>La mission</h3>
+            <p>
+              Croiser les données horaires ouvertes de production et de vent pour reconstituer les
+              courbes réelles et mieux éclairer la planification de l’éolien en mer.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section approach" id="approach">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Notre démarche</p>
+          <h2>De l’hypothèse à la mesure</h2>
+          <p>
+            Une démarche ouverte et reproductible, des relevés bruts à une compréhension plus
+            précise des performances réelles des parcs français.
+          </p>
+        </div>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step__index">01</span>
+            <div>
+              <h3>Ouvrir les données</h3>
+              <p>Partir de plusieurs années de production horaire réelle des parcs français.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">02</span>
+            <div>
+              <h3>Croiser les données</h3>
+              <p>Associer production et données de vent ouvertes, aux mêmes lieux et aux mêmes heures.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">03</span>
+            <div>
+              <h3>Reconstituer</h3>
+              <p>Établir la courbe de puissance réelle de chaque parc, sans s’appuyer uniquement sur la théorie.</p>
+            </div>
+          </li>
+          <li class="step reveal">
+            <span class="step__index">04</span>
+            <div>
+              <h3>Expliquer les écarts</h3>
+              <p>Étudier les sillages, la direction du vent et le lissage entre parcs.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section challenge" id="challenge">
+      <div class="container challenge__grid">
+        <div class="challenge__intro reveal">
+          <p class="eyebrow eyebrow--light">Le défi de 48 heures</p>
+          <h2>Ce que nous développons</h2>
+          <p>
+            Un tableau de bord interactif qui met en relation production et vent, reconstitue la
+            courbe réelle de chaque parc français et ajoute des analyses complémentaires.
+          </p>
+          <span class="badge">48 heures · ouvert · reproductible</span>
+        </div>
+        <ul class="challenge__list reveal">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Production et vent</h3>
+              <p>Nuages de points interactifs pour chaque parc.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Courbes de puissance reconstituées</h3>
+              <p>Le comportement réel, à partir des mesures horaires.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Sillages selon la direction</h3>
+              <p>Observer comment la direction du vent modifie la production d’un parc.</p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <h3>Théorie et réalité</h3>
+              <p>Comparer les courbes mesurées aux prévisions théoriques.</p>
+            </div>
+          </li>
+          <li>
+            <span>05</span>
+            <div>
+              <h3>Lissage entre parcs</h3>
+              <p>Étudier l’influence de la géographie et de l’échelle sur la production agrégée.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="team-photo-section" aria-label="Équipe du projet">
+      <div class="container">
+        <figure class="team-photo">
+          <img
+            src="Images/PHOTO%20GROUPE.jpg"
+            alt="L’équipe d’Ocean Hackaton réunie devant un bâtiment vitré"
+            loading="lazy"
+            decoding="async"
+          >
+          <figcaption>L’équipe Ocean Hackaton lors du défi BRET12.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section data" id="data">
+      <div class="container data__grid">
+        <div class="reveal">
+          <p class="eyebrow">Données sources</p>
+          <h2>Des relevés horaires ouverts</h2>
+          <p>
+            Le projet s’appuie sur les données horaires de production de quatre parcs éoliens en
+            mer français : Saint-Nazaire, Saint-Brieuc, Fécamp et Yeu-Noirmoutier. Elles couvrent
+            la période du 3 mars 2023 au 1er octobre 2026.
+          </p>
+        </div>
+        <div class="data__panel reveal">
+          <div>
+            <span class="data__label">Période</span>
+            <strong>2023 à 2026</strong>
+          </div>
+          <div>
+            <span class="data__label">Fréquence</span>
+            <strong>Horaire</strong>
+          </div>
+          <div>
+            <span class="data__label">Parcs</span>
+            <strong>Saint-Nazaire · Saint-Brieuc · Fécamp · Yeu-Noirmoutier</strong>
+          </div>
+          <div>
+            <span class="data__label">Accès</span>
+            <strong>Ouvert et reproductible</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Ocean Hackaton</p>
+        <p>Réalisé pour le défi BRET12 avec le CEREMA, à Brest.</p>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.cerema.fr/fr" target="_blank" rel="noreferrer">CEREMA</a>
+        <a href="https://unsplash.com/photos/white-electic-windmill-pONBhDyOFoM" target="_blank" rel="noreferrer">Crédit photo</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
