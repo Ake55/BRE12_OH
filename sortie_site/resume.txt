@@ -1,5 +1,5 @@
-SITE: 60 x 6.0 MW = 360 MW   |   selected production/wind time shift: +0 h
-CAPACITY FACTOR: gross 34.9%   net 34.2%   mean net energy 1,078 GWh/year
+SITE: 80 x 15.0 MW = 1200 MW   |   selected production/wind time shift: +0 h
+CAPACITY FACTOR: gross 34.2%   net 33.5%   mean net energy 3,524 GWh/year
 APPARENT TIME AVAILABILITY: 98.8% (wind between 28.8 and 90.0 km/h, production below 1.0% of rated capacity)
 ENERGY CALIBRATION FACTOR: 98.0% (observed production / modelled production; may exceed 100% and is not technical availability)
 
@@ -26,16 +26,16 @@ Yeu-Noirmoutier   4405        0.258         0.242                  -1.663       
 
 REFERENCE SENSITIVITY (curve recalculated after removing each farm):
    Farm_removed  Training_farms  Validated_min_wind_kmh  Validated_max_wind_kmh  Site_hours_outside_range_pct  Energy_calibration_factor_pct  Gross_CF_pct  Net_CF_pct  Net_CF_change_percentage_points
-  Saint-Nazaire               3                   2.700                  72.900                         0.830                         97.895        36.509      35.740                            1.571
-         Fécamp               3                   2.700                  80.100                         0.469                         98.395        34.673      34.117                           -0.053
-   Saint-Brieuc               3                   2.700                  80.100                         0.469                         97.773        33.765      33.013                           -1.156
-Yeu-Noirmoutier               3                   2.700                  80.100                         0.469                         97.885        34.815      34.079                           -0.091
-Net capacity factor range across farm-removal tests: 33.0–35.7 % (all reference farms: 34.2 %)
+  Saint-Nazaire               3                   2.700                  72.900                         1.313                         97.895        35.843      35.089                            1.583
+         Fécamp               3                   2.700                  80.100                         0.730                         98.395        34.025      33.479                           -0.026
+   Saint-Brieuc               3                   2.700                  80.100                         0.730                         97.773        33.090      32.353                           -1.153
+Yeu-Noirmoutier               3                   2.700                  80.100                         0.730                         97.885        34.138      33.416                           -0.090
+Net capacity factor range across farm-removal tests: 32.4–35.1 % (all reference farms: 33.5 %)
 
 VALIDATED REFERENCE WIND-SPEED RANGE: 2.70–80.10 km/h
-Site hours below range: 0.27%; above range: 0.20%.
-Share of modelled energy attributed to hours outside the range: 0.49 %.
-Sensitivity scenario only: net capacity factor would be 34.0% if production were zero above 80.10 km/h (actual high-wind behavior is unknown).
+Site hours below range: 0.35%; above range: 0.38%.
+Share of modelled energy attributed to hours outside the range: 0.97 %.
+Sensitivity scenario only: net capacity factor would be 33.2% if production were zero above 80.10 km/h (actual high-wind behavior is unknown).
 
 PRODUCTION DATA COVERAGE (expected hours = hours in the wind file):
            Farm  Expected_wind_hours  Production_hours  Missing_hours  Coverage_pct  Missing_periods  Longest_gap_hours                                                                                                                                      Main_gaps
@@ -71,18 +71,19 @@ Yeu-Noirmoutier: 2023-03-02 22:00–2025-06-30 00:00 (20402 hours); 2026-10-01 1
 
 SITE NET CAPACITY FACTOR BY YEAR:
 Year
-2016   38.700
-2017   31.800
-2018   32.800
-2019   34.600
-2020   39.000
-2021   32.600
-2022   32.100
-2023   37.100
-2024   31.800
-2025   31.200
+2016   28.300
+2017   31.100
+2018   33.700
+2019   35.900
+2020   36.900
+2021   33.400
+2022   34.400
+2023   35.400
+2024   32.000
+2025   33.800
 
 WARNINGS:
+ - Unit rated power 15.0 MW is outside the reference range (6-8 MW): the actual power-curve shape will differ (L2); treat the result as an order-of-magnitude estimate.
  - Validation: capacity-factor bias reaches 4.4 percentage points for a held-out farm; site capacity-factor uncertainty may be of a similar order.
  - Ramp-up excluded from the power-curve calculation: Fécamp (established operation from 2024-06-01, 80% of hours retained); Saint-Brieuc (established operation from 2024-06-01, 77% of hours retained); Yeu-Noirmoutier (established operation from 2026-04-01, 40% of hours retained)
 
@@ -98,6 +99,6 @@ ASSUMPTIONS AND ESTIMATION ACCURACY:
 - The model is most applicable to turbines, hub heights, sites, and conditions represented by the reference farms. Wake effects, hub-height differences, curtailment, and weather-product differences are not corrected separately.
 - Measured accuracy from leave-one-farm-out cross-validation: median absolute bias 2.92 capacity-factor percentage points, maximum absolute bias 4.44 points; hourly RMSE 12.9–16.2% of rated capacity; hourly correlation 0.88–0.92.
 - Accuracy limitation: validation uses the same farms and periods to tune parameters and assess performance by holding out one farm. It does not measure absolute weather errors and does not guarantee performance for a turbine or site outside these references.
-- Sensitivity to reference selection (one farm removed at a time, with no retraining on independent data): net capacity factor 33.01–35.74%, a change of -1.16 to +1.57 percentage points. This range is not a confidence interval.
+- Sensitivity to reference selection (one farm removed at a time, with no retraining on independent data): net capacity factor 32.35–35.09%, a change of -1.15 to +1.58 percentage points. This range is not a confidence interval.
 - Reference-production coverage: 35.0–94.2% across farms; potential bias from missing hours cannot be quantified without knowing their cause.
 - Interpretation: displayed decimal places reflect numerical precision, not guaranteed accuracy. Cross-validation and sensitivity above describe performance observed on the references only; they are not a confidence interval for a new site.
