@@ -291,7 +291,7 @@
 .swatch--line {
   width: 20px;
   height: 2px;
-  background: #f2b544;
+  background: var(--accent);
 }
 
 .swatch--dash {
@@ -501,7 +501,7 @@
   height: 0.65rem;
   border: 1px solid rgba(78, 54, 28, 0.25);
   border-radius: 999px;
-  background: linear-gradient(90deg, #f6f0de 0%, #f2b544 50%, #b63026 100%);
+  background: linear-gradient(90deg, #e7f3e8 0%, #62ad78 50%, #185b36 100%);
 }
 
 .windrose-color-scale__label {

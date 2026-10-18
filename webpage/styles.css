@@ -6,8 +6,8 @@
   --foam: #eef5f1;
   --sand: #f7f3ea;
   --paper: #fffdf8;
-  --accent: #f2b544;
-  --accent-deep: #c98a1f;
+  --accent: #62ad78;
+  --accent-deep: #287347;
   --text: #1c343d;
   --muted: #5d7279;
   --line: rgba(8, 37, 47, 0.14);
@@ -394,7 +394,7 @@ body.panel-open .side-panel {
 }
 
 .button--primary:hover {
-  background: #ffc85c;
+  background: #78c58b;
 }
 
 .button--ghost {
@@ -632,7 +632,7 @@ body.panel-open .side-panel {
 .badge {
   display: inline-block;
   padding: 0.45rem 0.9rem;
-  border: 1px solid rgba(242, 181, 68, 0.45);
+  border: 1px solid rgba(98, 173, 120, 0.45);
   border-radius: 999px;
   color: var(--accent);
   font-size: 0.72rem;

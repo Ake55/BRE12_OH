@@ -81,7 +81,7 @@
       title: "Production mesurée selon la vitesse du vent",
       text:
         "Chaque point représente une heure pour laquelle on dispose d’une mesure de production et " +
-        "d’une mesure de vent correspondante. La ligne orange représente la production moyenne par " +
+        "d’une mesure de vent correspondante. La ligne verte représente la production moyenne par " +
         "tranche de vent de 0,5 m/s et forme la courbe de puissance empirique.",
       legend:
         '<span class="explainer-legend__item"><i class="swatch swatch--dots"></i>Mesures horaires</span>' +
@@ -172,12 +172,12 @@
     name: "Moyenne empirique ± 1 écart-type (tranches de 0,5 m/s)",
     x: empirical.map((bin) => bin.center),
     y: empirical.map((bin) => bin.mean),
-    line: { color: "#c98a1f", width: 3 },
+    line: { color: "#287347", width: 3 },
     error_y: {
       type: "data",
       array: empirical.map((bin) => bin.stdDev),
       visible: true,
-      color: "rgba(201, 138, 31, 0.55)",
+      color: "rgba(40, 115, 71, 0.45)",
       thickness: 1,
       width: 4,
     },

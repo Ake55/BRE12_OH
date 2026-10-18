@@ -856,7 +856,7 @@
     window.L.marker([options.lat, options.lon]).addTo(overlayLayer).bindPopup("Site sélectionné");
     const circle = window.L.circle([options.lat, options.lon], {
       radius: options.satelliteRadius * 1000,
-      color: "#f2b544",
+      color: "#62ad78",
       weight: 2,
       fill: false,
     }).addTo(overlayLayer);

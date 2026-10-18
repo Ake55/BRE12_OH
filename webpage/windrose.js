@@ -12,9 +12,9 @@
     maximumFractionDigits: 1,
   });
   const hourColors = [
-    { stop: 0, color: [246, 240, 222] },
-    { stop: 0.5, color: [242, 181, 68] },
-    { stop: 1, color: [182, 48, 38] },
+    { stop: 0, color: [231, 243, 232] },
+    { stop: 0.5, color: [98, 173, 120] },
+    { stop: 1, color: [24, 91, 54] },
   ];
   const sectors = [
     { direction: "N", label: "Nord", angle: 0 },
@@ -181,7 +181,7 @@
       ]),
       fill: "toself",
       fillcolor: colorForHours(row.hours, maxHours),
-      line: { color: "rgba(78, 54, 28, 0.72)", width: 1.2 },
+      line: { color: "rgba(24, 76, 45, 0.72)", width: 1.2 },
       hoverinfo: "skip",
     }));
     const hoverPoints = ordered.flatMap((row) =>
