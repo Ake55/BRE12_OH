@@ -677,6 +677,31 @@ body.panel-open .side-panel {
   font-size: 0.88rem;
 }
 
+.team-photo-section {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  background: var(--foam);
+}
+
+.team-photo {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.team-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.team-photo figcaption {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
 .data__grid {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
